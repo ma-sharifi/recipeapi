@@ -8,30 +8,32 @@ It explains what needs to be done to use the service
 4. CLI. Commands provided with [HTTPie](https://httpie.io/).
 
 ### API
-I described all APIs here
+I described all APIs here. All APIs are protected except /v1/users that I used it for issuing token for other APIS.
 
 #### 1. User /v1/users
 1. Issue a bearer token.
 * **POST**`/v1/users/login` HTTP Status: 200
+* Note: API get the username from this token and it effects on its queries.
 
 #### 2. Recipe /v1/recipes
-1. Users can create(add) recipe
+1. Users can create(add) recipe.
  * **POST**`/v1/recipes` HTTP Status: 201
  *Note: For post because I put the URL of the created entity in the Location HTTP Header, we can remove the body from the response.
-2. Get list of all recipes
+2. Get list of all recipes of current user.
  * **GET**`/v1/recipes` HTTP Status: 200
  * Provided by paging. You can use it this way in this service: ?sort=id,desc&page=0&size=2
  * `sort=id,desc` it means sort by id by descending order (use asc for ascending). Id is the field of recipe.
  * size=2 it means paginate the result such a way there are 2 items per page.
  * page=0 just return page 0 not any other pages.
-3. Get a recipe by its `id`.
+3. Get user recipe by its `id`.
  * **GET**`/v1/recipes/{id}` HTTP Status: 200
-4. Delete a recipe
+4. Delete a recipe of user 
 * **DELETE**`/v1/recipes` HTTP Status: 204
-5. Search recipe with given criteria
+5. Search into user recipe with given criteria
 * **GET**`/v1/recipes/search` HTTP Status: 200
 
 #### 3. Ingredient /v1/ingredients
+*Note: Ingredients are share between users. Each user can use them.
 1. Users can create(add) ingredient
 * **POST**`/v1/ingredients` HTTP Status: 201
 2. Get list of all ingredients
@@ -76,7 +78,7 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZ
 ```bash
 http POST localhost:8080/v1/recipes title="sushi" instruction="cooked by stove" serve=2 vegetarian=false 'ingredients:=[{"id":2}]' 'Authorization:Bearer Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2NTE4ODk5LCJleHAiOjE2NjkxMTQ0OTl9.zBrMxevBPatKwirCF_OmwpAeusxB63ze5yy_RkefqgKZnRAuxy7y-IYIvDjznTdpgwrxqvXuXLzs7GnKhF6m_w'
 ```
-*Note: HTTPie you can send raw JSON this way: `field:=json`. 
+*Note: With HTTPie you can send raw JSON this way: `field:=json`. 
 For example:  
 ```bash
 ingredients:=[{"id":2}]
@@ -112,7 +114,7 @@ Location: /v1/recipes/6
 ```
 
 ### GET /v1/recipes
-Get list of all recipes HTTP Status: 200
+Get list of all user recipes HTTP Status: 200
 #### Request:
 ```bash
 http GET localhost:8080/v1/recipes 'Authorization:Bearer Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2NTE4ODk5LCJleHAiOjE2NjkxMTQ0OTl9.zBrMxevBPatKwirCF_OmwpAeusxB63ze5yy_RkefqgKZnRAuxy7y-IYIvDjznTdpgwrxqvXuXLzs7GnKhF6m_w'
@@ -182,7 +184,7 @@ HTTP/1.1 200
 ```
 
 ### GET /v1/recipes/{id}
-Get a recipe by its `id`. HTTP Status: 200
+Get a user recipe by its `id`. HTTP Status: 200
 Get the id from response of POST /v1/recipes
 #### Request:
 ```bash
@@ -217,7 +219,7 @@ HTTP/1.1 200
 ```
 
 ### DELETE /v1/recipes/{id}
-Delete a recipe by specified `id`. HTTP Status: 204
+Delete a user recipe by specified `id`. HTTP Status: 204
 Get the id from response of POST /v1/recipes
 #### Request:
 ```bash
@@ -243,11 +245,17 @@ HTTP/1.1 404
 ```
 
 ### GET /v1/recipes/search
-Search recipe with given criteria. HTTP Status: 200
+Search user recipe with given criteria. HTTP Status: 200
+1. find all vegetarian recipe
+2. find all none-vegetarian recipe
+3. find by number of serving
+4. find all recipes for 4 person with potatoes
+5. Request find all recipes without salmon as ingredient with oven as instruction
+
 ```bash
 HTTP/1.1 200 
 ```
-#### Request find all vegetarian recipe
+#### 1. Request find all vegetarian recipe
 ```bash
 http GET "localhost:8080/v1/recipes/search?isveg=true" 'Authorization:Bearer Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2NTE4ODk5LCJleHAiOjE2NjkxMTQ0OTl9.zBrMxevBPatKwirCF_OmwpAeusxB63ze5yy_RkefqgKZnRAuxy7y-IYIvDjznTdpgwrxqvXuXLzs7GnKhF6m_w'
 ```
@@ -280,7 +288,7 @@ http GET "localhost:8080/v1/recipes/search?isveg=true" 'Authorization:Bearer Bea
   "timestamp": "2022-10-23T10:58:30.060+00:00"
 }
 ```
-#### Request find all none-vegetarian recipe
+#### 2. Request find all none-vegetarian recipe
 ```bash
 http GET "localhost:8080/v1/recipes/search?isveg=false" 'Authorization:Bearer Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2NTE4ODk5LCJleHAiOjE2NjkxMTQ0OTl9.zBrMxevBPatKwirCF_OmwpAeusxB63ze5yy_RkefqgKZnRAuxy7y-IYIvDjznTdpgwrxqvXuXLzs7GnKhF6m_w'
 ```
@@ -312,7 +320,7 @@ http GET "localhost:8080/v1/recipes/search?isveg=false" 'Authorization:Bearer Be
   "timestamp": "2022-10-23T11:02:24.962+00:00"
 }
 ```
-#### Request find by number of serving
+#### 3. Request find by number of serving
 ```bash
 http GET "localhost:8080/v1/recipes/search?serve=4" 'Authorization:Bearer Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2NTE4ODk5LCJleHAiOjE2NjkxMTQ0OTl9.zBrMxevBPatKwirCF_OmwpAeusxB63ze5yy_RkefqgKZnRAuxy7y-IYIvDjznTdpgwrxqvXuXLzs7GnKhF6m_w'
 ```
@@ -346,7 +354,7 @@ http GET "localhost:8080/v1/recipes/search?serve=4" 'Authorization:Bearer Bearer
 }
 ```
 
-#### Request find all recipes for 4 person with potatoes
+#### 4. Request find all recipes for 4 person with potatoes
 ```bash
 http GET "localhost:8080/v1/recipes/search?ingredient=potatoes&serve=4" 'Authorization:Bearer Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2NTE4ODk5LCJleHAiOjE2NjkxMTQ0OTl9.zBrMxevBPatKwirCF_OmwpAeusxB63ze5yy_RkefqgKZnRAuxy7y-IYIvDjznTdpgwrxqvXuXLzs7GnKhF6m_w'
 ```
@@ -381,7 +389,7 @@ http GET "localhost:8080/v1/recipes/search?ingredient=potatoes&serve=4" 'Authori
 ```
 
 
-#### Request find all recipes without salmon as ingredient with oven as instruction
+#### 5. Request find all recipes without salmon as ingredient with oven as instruction
 ```bash
 http GET "localhost:8080/v1/recipes/search?ingredient=-salmon&instruction=oven" 'Authorization:Bearer Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2NTE4ODk5LCJleHAiOjE2NjkxMTQ0OTl9.zBrMxevBPatKwirCF_OmwpAeusxB63ze5yy_RkefqgKZnRAuxy7y-IYIvDjznTdpgwrxqvXuXLzs7GnKhF6m_w'
 ```

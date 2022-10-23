@@ -24,7 +24,6 @@ class RecipeTest {
         String title = "Chicken Kabab";
         recipe.setTitle(title );
         assertEquals(title, recipe.getTitle());
-
     }
 
     @Test

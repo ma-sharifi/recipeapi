@@ -12,20 +12,14 @@ import java.math.BigInteger;
 class RecipeDtoTest {
 
     @Test
-    void testDto() throws Exception {
+    void testDto()  {
         RecipeDto recipeDto1 = new RecipeDto();
-//        recipeDto1.setId(new BigInteger(1+""));
+        recipeDto1.setId(1L);
+        recipeDto1.setTitle("title");
         RecipeDto recipeDto2 = new RecipeDto();
         recipeDto2.setId(recipeDto1.getId());
+        recipeDto2.setTitle(recipeDto1.getTitle());
         assertThat(recipeDto1).isEqualTo(recipeDto2);
 
-//        recipeDTO1.setId(1L);
-//        Assertions.assertThat(recipeDTO1).isNotEqualTo(recipeDTO2);
-//        recipeDTO2.setId(recipeDTO1.getId());
-//        Assertions.assertThat(recipeDTO1).isEqualTo(recipeDTO2);
-//        recipeDTO2.setId(2L);
-//        Assertions.assertThat(recipeDTO1).isNotEqualTo(recipeDTO2);
-//        recipeDTO1.setId(null);
-//        Assertions.assertThat(recipeDTO1).isNotEqualTo(recipeDTO2);
     }
 }

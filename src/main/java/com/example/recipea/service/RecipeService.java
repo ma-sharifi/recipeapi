@@ -23,6 +23,6 @@ public interface RecipeService {
 
     RecipeDto findOne(Long id,String username) throws RecipeNotFoundException;
 
-    void deleteByIdAndUsername(Long id,String name);
+    long deleteByIdAndUsername(Long id,String name);
 
 }

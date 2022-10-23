@@ -1,19 +1,15 @@
 package com.example.recipea.service.impl;
 
+import com.example.recipea.entity.Recipe;
 import com.example.recipea.exception.BadRequestException;
 import com.example.recipea.exception.RecipeNotFoundException;
-import com.example.recipea.security.AuthenticationFacade;
-import com.example.recipea.service.dto.CycleAvoidingMappingContext;
-import com.example.recipea.service.dto.RecipeDto;
-import com.example.recipea.entity.Recipe;
-import com.example.recipea.service.dto.ResponseDto;
-import com.example.recipea.service.mapper.IngredientMapper;
-import com.example.recipea.service.mapper.RecipeMapper;
 import com.example.recipea.repository.RecipeRepository;
 import com.example.recipea.service.RecipeService;
+import com.example.recipea.service.dto.CycleAvoidingMappingContext;
+import com.example.recipea.service.dto.RecipeDto;
+import com.example.recipea.service.mapper.RecipeMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,6 +27,7 @@ import java.util.stream.Collectors;
  * @author Mahdi Sharifi
  * Service  for  Recipe.
  */
+@Transactional
 @Service
 @Slf4j
 public class RecipeServiceImpl implements RecipeService {
@@ -39,32 +36,27 @@ public class RecipeServiceImpl implements RecipeService {
 
     private final RecipeMapper recipeMapper;
 
-    private EntityManager em;
+    private final EntityManager em;
 
     public RecipeServiceImpl(RecipeRepository recipeRepository, RecipeMapper recipeMapper, EntityManager em) {
         this.recipeRepository = recipeRepository;
         this.recipeMapper = recipeMapper;
-        this.em=em;
+        this.em = em;
     }
-
+    @Transactional(readOnly = true)
     public List<RecipeDto> findByIngredientsAndInstructionAndServeAndVegetarian(String ingredient,
-                                                                      String instruction, Boolean isveg, Integer serve, String username) {
+                                                                                String instruction, Boolean isveg, Integer serve, String username) {
 
         log.debug(" #ingredients = " + ingredient + ", instruction = " + instruction + ", isveg = " + isveg + ", serve = " + serve);
-        Set<String> ingredientsInclude=new HashSet<>();
+        Set<String> ingredientsInclude = new HashSet<>();
         Set<String> ingredientsExclude = new HashSet<>();
 
-        String[] ingredientsArray=null;
-         if(ingredient!=null) {
-             ingredientsArray = ingredient.split(",");//Gluten Free, Vegetarian,-Diet
-             ingredientsInclude = Arrays.stream(ingredientsArray).filter(i -> !i.startsWith("-")).map(String::trim).collect(Collectors.toSet());
-             ingredientsExclude = Arrays.stream(ingredientsArray).filter(i -> ingredient.startsWith("-")).map(i -> ingredient.substring(1).trim()).collect(Collectors.toSet());
-         }
-
-        log.debug("#ingredientsArray-> " + ingredientsArray);
-        log.debug("#ingredientsInclude-> " + ingredientsInclude);
-        log.debug("#ingredientsExclude-> " + ingredientsExclude);
-        //https://www.baeldung.com/spring-data-criteria-queries
+        String[] ingredientsArray = null;
+        if (ingredient != null) { // extract fields exluded and included and put them into set.
+            ingredientsArray = ingredient.split(",");//potatoes, -salmon ,-diet
+            ingredientsInclude = Arrays.stream(ingredientsArray).filter(i -> !i.startsWith("-")).map(String::trim).collect(Collectors.toSet());
+            ingredientsExclude = Arrays.stream(ingredientsArray).filter(i -> ingredient.startsWith("-")).map(i -> ingredient.substring(1).trim()).collect(Collectors.toSet());
+        }
         List<String> whereCause = new ArrayList<>();
         Map<Integer, Object> parameters = new HashMap<>();
         StringBuilder queryBuilder = new StringBuilder();
@@ -76,20 +68,20 @@ public class RecipeServiceImpl implements RecipeService {
                 "where 1<2 ${WHERE} ) AND 1<2 ");
 
         int counter = 1;
-        String not = "";
+        String not = "";// I used it for excluding an ingredient like -salmon.
 
-        //------ SELECT IN ------ INGREDIENT -----------
+        //------ SELECT IN --- INGREDIENT -----------
         for (String include : ingredientsInclude) {
             if (!ingredient.isEmpty()) {
-                parameters.put(counter, include.toUpperCase());
-                whereCause.add(" and UPPER(i.title) = ?" + counter);
+                parameters.put(counter, include.toLowerCase());
+                whereCause.add(" and LOWER(i.title) = ?" + counter);
                 counter++;
             }
         }
         for (String exclude : ingredientsExclude) {
             if (!ingredient.isEmpty()) {
-                parameters.put(counter, exclude.toUpperCase());
-                whereCause.add(" and UPPER(i.title) = ?" + counter);
+                parameters.put(counter, exclude.toLowerCase());
+                whereCause.add(" and LOWER(i.title) = ?" + counter);
                 not = " not ";
                 counter++;
             }
@@ -97,8 +89,8 @@ public class RecipeServiceImpl implements RecipeService {
         //----------- RECIPE -------
         List<String> whereCauseRecipe = new ArrayList<>();
         if (instruction != null && !instruction.isEmpty()) {
-            parameters.put(counter, "%" + instruction.toUpperCase() + "%");
-            whereCauseRecipe.add(" and UPPER(r.instruction) LIKE ?" + counter);
+            parameters.put(counter, "%" + instruction.toLowerCase() + "%");
+            whereCauseRecipe.add(" and LOWER(r.instruction) LIKE ?" + counter);
             counter++;
         }
         if (isveg != null) {
@@ -111,17 +103,17 @@ public class RecipeServiceImpl implements RecipeService {
             whereCauseRecipe.add(" and r.serve = ?" + counter);
             counter++;
         }
-        if(username!=null){
-            parameters.put(counter, username);
-            whereCauseRecipe.add(" and r.username = ?" + counter);
+        if (username != null) {
+            parameters.put(counter, username.toLowerCase());
+            whereCauseRecipe.add(" and LOWER(r.username) = ?" + counter);
             counter++;
         }
 
         String queryNative = queryBuilder.append(StringUtils.join(whereCauseRecipe, " ")).toString().replace("${NOT}", not).replace("${WHERE}", StringUtils.join(whereCause, " "));
-        log.debug("#queryNative: "+queryNative);
+        log.debug("#queryNative: " + queryNative);
         Query jpaQuery = em.createNativeQuery(queryNative, Recipe.class);
 
-        for (Map.Entry<Integer, Object> entry: parameters.entrySet()) {
+        for (Map.Entry<Integer, Object> entry : parameters.entrySet()) {
             jpaQuery.setParameter(entry.getKey(), entry.getValue());
         }
         List<Recipe> result = (List<Recipe>) jpaQuery.getResultList();
@@ -129,48 +121,50 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Page<RecipeDto> findAll(Pageable pageable,String username) {
-        return recipeRepository.findByUsername(pageable,username).map(recipe -> recipeMapper.toDto(recipe,new CycleAvoidingMappingContext()));
+    @Transactional(readOnly = true)
+    public Page<RecipeDto> findAll(Pageable pageable, String username) {
+        return recipeRepository.findByUsername(pageable, username).map(recipe -> recipeMapper.toDto(recipe, new CycleAvoidingMappingContext()));
     }
 
     @Override
-    public RecipeDto findOne(Long id,String name) throws RecipeNotFoundException {
-        Optional<Recipe> accountOptional = recipeRepository.findByIdAndUsername(id,name);
-        return accountOptional.map(recipe -> recipeMapper.toDto(recipe,new CycleAvoidingMappingContext())).orElseThrow(() ->
-                new RecipeNotFoundException(id+""));
+    @Transactional(readOnly = true)
+    public RecipeDto findOne(Long id, String name) throws RecipeNotFoundException {
+        Optional<Recipe> accountOptional = recipeRepository.findByIdAndUsername(id, name);
+        return accountOptional.map(recipe -> recipeMapper.toDto(recipe, new CycleAvoidingMappingContext())).orElseThrow(() ->
+                new RecipeNotFoundException(id + ""));
     }
 
     @Override
     public RecipeDto save(RecipeDto recipeDto) {
         log.debug("#Save Recipe : {}", recipeDto);
         if (recipeDto.getId() != null) {
-            throw new BadRequestException("A new recipe cannot already have an Id. expected null, but actual is: "+recipeDto.getId() );
+            throw new BadRequestException("A new recipe cannot already have an Id. expected null, but actual is: " + recipeDto.getId());
         }
-        Recipe recipe = recipeMapper.toEntity(recipeDto,new CycleAvoidingMappingContext());
+        Recipe recipe = recipeMapper.toEntity(recipeDto, new CycleAvoidingMappingContext());
         recipe = recipeRepository.save(recipe);
-        return recipeMapper.toDto(recipe , new CycleAvoidingMappingContext());
+        return recipeMapper.toDto(recipe, new CycleAvoidingMappingContext());
     }
 
     @Override
-    public RecipeDto update(@Valid @NotNull(message ="#recipeDto is mandatory") RecipeDto recipeDto) {
+    public RecipeDto update(@Valid @NotNull(message = "#recipeDto is mandatory") RecipeDto recipeDto) {
         log.debug("#Update Recipe: {}", recipeDto);
         if (recipeDto.getId() == null) {
             throw new BadRequestException("#Invalid Recipe id! For update uou need to provide id for the entity.");
         }
-        Recipe recipe = recipeMapper.toEntity(recipeDto , new CycleAvoidingMappingContext());
+        Recipe recipe = recipeMapper.toEntity(recipeDto, new CycleAvoidingMappingContext());
         recipe = recipeRepository.save(recipe);
-        return recipeMapper.toDto(recipe , new CycleAvoidingMappingContext());
+        return recipeMapper.toDto(recipe, new CycleAvoidingMappingContext());
     }
 
     @Override
-    public void deleteByIdAndUsername(Long id,String username) {
-        log.debug("#Delete Recipe by id: "+ id);
-        Optional<Recipe> recipeOptional=recipeRepository.findById(id);
-        if(recipeOptional.isPresent()){
-           if(!username.equalsIgnoreCase(recipeOptional.get().getUsername()))
-               throw new BadRequestException("id: "+id+" is not belong to user: "+username);
-        } else  throw new RecipeNotFoundException(id+"");
-        recipeRepository.deleteByIdAndUsername(id,username);
+    public long deleteByIdAndUsername(Long id, String username) {
+        log.debug("#Delete Recipe by id: " + id);
+        Optional<Recipe> recipeOptional = recipeRepository.findById(id);
+        if (recipeOptional.isPresent()) {
+            if (!username.equalsIgnoreCase(recipeOptional.get().getUsername()))
+                throw new BadRequestException("id: " + id + " is not belong to user: " + username);
+        } else throw new RecipeNotFoundException(id + "");
+       return recipeRepository.deleteByIdAndUsername(id, username);
     }
 }
 

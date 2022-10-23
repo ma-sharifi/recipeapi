@@ -10,7 +10,7 @@ class IngredientDtoTest {
 
 
     @Test
-    void testDto() throws Exception {
+    void testDto()  {
         IngredientDto IngredientDto1 = new IngredientDto();
         IngredientDto1.setId(1L);
         IngredientDto IngredientDto2 = new IngredientDto();
