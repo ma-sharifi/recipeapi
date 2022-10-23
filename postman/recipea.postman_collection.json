@@ -1,0 +1,798 @@
+{
+	"info": {
+		"_postman_id": "653382ab-ec2e-476c-b7dd-55c4d417d9f7",
+		"name": "recipea",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3135179"
+	},
+	"item": [
+		{
+			"name": "recipe",
+			"item": [
+				{
+					"name": "search",
+					"item": [
+						{
+							"name": "find all vegetarian recipe",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/v1/recipes/search?isveg=true",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"recipes",
+										"search"
+									],
+									"query": [
+										{
+											"key": "isveg",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "search",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/v1/recipes/search?isveg=false",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"recipes",
+										"search"
+									],
+									"query": [
+										{
+											"key": "isveg",
+											"value": "false"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "find all recipe for 4 person with potatoes",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/v1/recipes/search?ingredient=potatoes&serve=4",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"recipes",
+										"search"
+									],
+									"query": [
+										{
+											"key": "ingredient",
+											"value": "potatoes"
+										},
+										{
+											"key": "serve",
+											"value": "4"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "find all recipe without salmon as ingredient with oven as instruction",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/v1/recipes/search?ingredient=-salmon&instruction=oven",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"recipes",
+										"search"
+									],
+									"query": [
+										{
+											"key": "ingredient",
+											"value": "-salmon"
+										},
+										{
+											"key": "instruction",
+											"value": "oven"
+										}
+									]
+								},
+								"description": "find all recipe without salmon as ingredient with oven in instruction"
+							},
+							"response": []
+						},
+						{
+							"name": "find all non vegetarian",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/v1/recipes/search?isveg=false",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"recipes",
+										"search"
+									],
+									"query": [
+										{
+											"key": "isveg",
+											"value": "false"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "find by number of serving",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/v1/recipes/search?serve=4",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"recipes",
+										"search"
+									],
+									"query": [
+										{
+											"key": "serve",
+											"value": "4"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "find by specific included ingredient",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/v1/recipes/search?ingredient=potatoes",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"recipes",
+										"search"
+									],
+									"query": [
+										{
+											"key": "ingredient",
+											"value": "potatoes"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "find by specific excluded ingredient",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/v1/recipes/search?ingredient=-salmon",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"recipes",
+										"search"
+									],
+									"query": [
+										{
+											"key": "ingredient",
+											"value": "-salmon"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "By recipes Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204 using to have\", function () {",
+									"  pm.response.to.have.status(204);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v1/recipes/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"recipes",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create recipe",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201 using to have\", function () {",
+									"  pm.response.to.have.status(201);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n            \"title\": \"Salmon With 1 ingredient\",\n            \"instruction\": \"This kabab cooked by stove\",\n            \"serve\": 3,\n            \"vegetarian\": false,\n            \"ingredients\": [\n                {\n                    \"id\":1\n                }\n            ]\n        }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/v1/recipes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"recipes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "all recipe",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 using to have\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v1/recipes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"recipes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Throw JdbcSQLIntegrityConstraintViolationException",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400 using to have\", function () {",
+									"  pm.response.to.have.status(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n            \"title\": \"Salmon Kababq4\",\n            \"instruction\": \"This kabab cooked by stove4\",\n            \"serve\": 3,\n            \"vegetarian\": false,\n            \"ingredients\": [\n                {\n                    \"id\":1,\n                    \"title\": \"oil\"\n                },\n                {\n                    \"title\": \"salmon\",\n                    \"id\": 2\n                }\n            ]\n        }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/v1/recipes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"recipes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update recipe by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 using to have\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n            \"id\": 6,\n            \"title\": \"Salmon23\",\n            \"username\": \"mahdi\",\n            \"instruction\": \"This kabab cooked by stove4\",\n            \"serve\": 3,\n            \"vegetarian\": false,\n            \"ingredients\": [\n                {\n                    \"title\": \"oil\",\n                    \"id\": 1\n                },\n                {\n                    \"title\": \"salmon\",\n                    \"id\": 2\n                }\n            ]\n        }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/v1/recipes/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"recipes",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "not-existing-path",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v1/recipes/not/existing-path",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"recipes",
+								"not",
+								"existing-path"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ingredient",
+			"item": [
+				{
+					"name": "all ingredients",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 using to have\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v1/ingredients",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"ingredients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "one ingredients by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 using to have\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v1/ingredients/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"ingredients",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "creat an ingredient",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201 using to have\", function () {",
+									"  pm.response.to.have.status(201);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"oil2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/v1/ingredients",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"ingredients"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 using to have\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "mahdi",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

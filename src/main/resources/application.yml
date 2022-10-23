@@ -1,0 +1,43 @@
+environement:
+  property: I AM THE DEFAULT
+
+logging:
+  level:
+    ROOT: INFO
+#    org.hibernate.SQL: INFO
+    com.example: DEBUG
+
+spring:
+  application:
+    name: recipea
+  datasource:
+    url: jdbc:h2:mem:recipea
+#   url: jdbc:h2:file:/data/recipea if you  want to store data, uncomment this line
+    driverClassName: org.h2.Driver
+    username: sa
+    password: sa
+  h2:
+    console.enabled: true # Access to H2 Console with link: http://localhost:8080/h2-console
+    console.path: /h2-console
+    console.settings.trace: false
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+#    show-sql: true
+#    properties:
+#      hibernate:
+#      format_sql: true
+
+server:
+  port: 8080
+
+#security:
+#  basic:
+#    enabled: true
+#    authorize-mode: NONE
+#
+#jwt:
+#  secret: mySecret
+#

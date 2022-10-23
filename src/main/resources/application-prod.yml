@@ -1,0 +1,19 @@
+environement:
+  property: I AM PROD
+
+logging:
+  level:
+    ROOT: INFO
+    com.example: INFO
+
+spring:
+  application:
+    name: recipea
+  datasource:
+    url: jdbc:mariadb://localhost:3306/recipea
+    username: root
+    password: root
+    driver-class-name: org.mariadb.jdbc.Driver
+
+server:
+  port: 8080
