@@ -143,8 +143,6 @@ class IngredientControllerImplIT {
         // Initialize the database
         ingredientRepository.saveAndFlush(ingredient);
 
-        System.out.println("#ingredient: "+ingredient);
-
         // Get all the ingredientList
         mockMvc
                 .perform(get(ENTITY_API_URL ).header("Authorization", JWT))

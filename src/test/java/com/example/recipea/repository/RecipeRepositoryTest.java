@@ -12,6 +12,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,14 +37,16 @@ class RecipeRepositoryTest {
     @Test
     void shouldSaveAndLoadAndDelete() {
         //The first saves a newly created Ingredient in the database
+        String titleIngredient="oil-sunflower-"+ ThreadLocalRandom.current().nextInt(1000);//because we have constraint on title
         Ingredient recipeRiceSaved = transactionTemplate.execute((ts) -> {
-            Ingredient recipeRice = new Ingredient("oil-sunflower");
+            Ingredient recipeRice = new Ingredient(titleIngredient);
             ingredientRepository.save(recipeRice);
             return recipeRice;
         });
         //The second transaction saves a newly created Recipe in the database
+        String titleRecipe="French fries-"+ ThreadLocalRandom.current().nextInt(1000);//because we have constraint on title
         Long id = transactionTemplate.execute((ts) -> {
-            Recipe recipeRice = new Recipe("French fries", "Cook potato on oven", 2);
+            Recipe recipeRice = new Recipe(titleRecipe, "Cook potato on oven", 2,"mahdi");
             recipeRice.setVegetarian(true);
             recipeRice.addIngredient(recipeRiceSaved);
             recipeRepository.save(recipeRice);
@@ -53,7 +56,7 @@ class RecipeRepositoryTest {
         Recipe recipe= transactionTemplate.execute((ts) -> {
             Recipe recipePersisted = recipeRepository.findById(id).get();
             assertEquals(id, recipePersisted.getId());
-            assertEquals("French fries", recipePersisted.getTitle());
+            assertEquals(titleRecipe, recipePersisted.getTitle());
             assertEquals("Cook potato on oven", recipePersisted.getInstruction());
             assertEquals(2, recipePersisted.getServe());
             assertTrue(recipePersisted.isVegetarian());
@@ -80,20 +83,21 @@ class RecipeRepositoryTest {
     @Test
     void shouldUpdateSavedRecipe(){
         //At first transaction saves a newly created Recipe in the database
+        String title="French fries-"+ ThreadLocalRandom.current().nextInt(1000);
         Recipe recipeSave = transactionTemplate.execute((ts) -> {
-            Recipe recipeRice = new Recipe("French fries", "Cook potato on oven", 2);
+            Recipe recipeRice = new Recipe(title, "Cook potato on oven", 2,"mahdi");
             recipeRice.setVegetarian(true);
             recipeRepository.save(recipeRice);
-            assertEquals("French fries", recipeRice.getTitle());
+            assertEquals(title, recipeRice.getTitle());
             assertEquals("Cook potato on oven", recipeRice.getInstruction());
             assertEquals(2, recipeRice.getServe());
             assertTrue(recipeRice.isVegetarian());
             return recipeRice;
         });
-        System.out.println("#recipeSave: "+recipeSave);
-        //The second transaction udate the Recipe and verifies that its fields are properly initialized
+        //The second transaction update the Recipe and verifies that its fields are properly initialized
+         String titleForUpdate="Updated French fries-"+ThreadLocalRandom.current().nextInt(1000);
          transactionTemplate.execute((ts) -> {
-             recipeSave.setTitle("Updated French fries");
+             recipeSave.setTitle(titleForUpdate);
              recipeSave.setInstruction("Updated Cook potato on oven");
              recipeSave.setServe(3);
              recipeSave.setVegetarian(false);
@@ -103,9 +107,9 @@ class RecipeRepositoryTest {
         //The third transaction loads the Recipe and verifies that its fields are properly updated
          transactionTemplate.execute((ts) -> {
             Recipe recipePersisted = recipeRepository.findById(recipeSave.getId()).get();
-            System.out.println("#recipePersisted: "+recipePersisted);
+
             assertEquals(recipeSave.getId(), recipePersisted.getId());
-            assertEquals("Updated French fries", recipePersisted.getTitle());
+            assertEquals(titleForUpdate, recipePersisted.getTitle());
             assertEquals("Updated Cook potato on oven", recipePersisted.getInstruction());
             assertEquals(3, recipePersisted.getServe());
             assertFalse(recipePersisted.isVegetarian());

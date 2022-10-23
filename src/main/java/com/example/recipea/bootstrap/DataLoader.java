@@ -51,23 +51,18 @@ public class DataLoader implements CommandLineRunner {
         Ingredient ingredientPotato=new Ingredient("potatoes");
         ingredientRepository.save(ingredientPotato);
 
-        Recipe recipeSalmonKabab = new Recipe();
-        recipeSalmonKabab.setTitle("Salmon Kabab");
-        recipeSalmonKabab.setServe(1);
+        Recipe recipeSalmonKabab = new Recipe("Salmon Kabab", "This kabab cooked by stove", 1,"mahdi");
         recipeSalmonKabab.addIngredient(ingredientOil);
         recipeSalmonKabab.addIngredient(ingredientSalmon);
-        recipeSalmonKabab.setInstruction("This kabab cooked by stove");
-        recipeSalmonKabab.setUsername("mahdi");
 
         recipeRepository.save(recipeSalmonKabab);
         log.debug("#recipeSalmonKabab: " + recipeSalmonKabab);
 
         //----------------
-        Recipe recipeFrenchFries = new Recipe("French fries", "Cook potato on oven", 4);
+        Recipe recipeFrenchFries = new Recipe("French fries", "Cook potato on oven", 4,"mahdi");
         recipeFrenchFries.setVegetarian(true);
         recipeFrenchFries.addIngredient(ingredientPotato);
         recipeFrenchFries.addIngredient(ingredientOil);
-        recipeFrenchFries.setUsername("mahdi");
 
         recipeRepository.save(recipeFrenchFries);
         log.debug("#Recipe_Rice: " + recipeFrenchFries);

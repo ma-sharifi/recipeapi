@@ -15,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "T_RECIPE",
         indexes = {
-//                @Index(name = "IDX_RECIPE_INSTRUCTION", columnList = "INSTRUCTION"), // It depends-> I recommand save this field + id on Elasticsearch
+//              @Index(name = "IDX_RECIPE_INSTRUCTION", columnList = "INSTRUCTION"), // It depends-> I recommand save this field + id on Elasticsearch
                 @Index(name = "IDX_RECIPE_SERVE", columnList = "SERVE")
         },
         uniqueConstraints = {
@@ -39,7 +39,7 @@ public class Recipe extends BaseEntity {
     @Column(name = "SERVE", nullable = false)
     private Integer serve;
 
-    @Column(name = "USERNAME", length = 60)
+    @Column(name = "USERNAME", length = 60,nullable = false)
     private String username;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -51,12 +51,12 @@ public class Recipe extends BaseEntity {
     @JsonIgnoreProperties(value = {"recipes"}, allowSetters = true)
     private Set<Ingredient> ingredients = new HashSet<>();
 
-    public Recipe(String title, String instruction, Integer serve) {
+    public Recipe(String title, String instruction, Integer serve, String username) {
         this.title = title;
         this.instruction = instruction;
         this.serve = serve;
+        this.username = username;
     }
-
 
     public Recipe addIngredient(Ingredient ingredient) {
         this.ingredients.add(ingredient);

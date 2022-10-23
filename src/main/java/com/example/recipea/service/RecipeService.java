@@ -13,16 +13,16 @@ import java.util.List;
 public interface RecipeService {
 
     List<RecipeDto> findByIngredientsAndInstructionAndServeAndVegetarian(String ingredient,
-                                                                                String instruction, Boolean isveg, Integer serve);
+                                                                                String instruction, Boolean isveg, Integer serve, String username);
 
     RecipeDto save(RecipeDto recipeDto);
 
     RecipeDto update(RecipeDto recipeDto);
 
-    Page<RecipeDto> findAll(Pageable pageable);
+    Page<RecipeDto> findAll(Pageable pageable,String username);
 
-    RecipeDto findOne(Long id) throws RecipeNotFoundException;
+    RecipeDto findOne(Long id,String username) throws RecipeNotFoundException;
 
-    void delete(Long id);
+    void deleteByIdAndUsername(Long id,String name);
 
 }

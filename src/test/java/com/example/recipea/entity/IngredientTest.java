@@ -15,10 +15,10 @@ class IngredientTest {
     Ingredient ingredient;
 
     @Test
-    void testIngredient() { //TODO SPlit it to smaller method one thing must do
+    void testIngredient() { //TODO Split it to smaller method one thing must do
         Ingredient ingredient1 = new Ingredient("salt");
         ingredient1.setId(1L);
-        Recipe recipe=new Recipe("sushi", "instruction", 1);
+        Recipe recipe=new Recipe("sushi", "instruction", 1,"mahdi");
         recipe.setId(10L);
         ingredient1.setRecipes(Set.of(recipe));
 

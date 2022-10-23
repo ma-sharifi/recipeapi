@@ -13,9 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -48,42 +46,52 @@ class RecipeServiceSolitaryTest {
 
     @Spy
     EntityManager entityManager;
+//    @Spy
+//    AuthenticationFacade authenticationFacade;
 
     @BeforeEach
     void initializeService() {
         service = new RecipeServiceImpl(repository, mapper, entityManager);
+//        Authentication authentication = Mockito.mock(Authentication.class);
+// Mockito.whens() for your authorization object
+//        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+
+//        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
+//        SecurityContextHolder.setContext(securityContext);
+
+//        when(authenticationFacade.getAuthentication()).thenReturn(authentication);
     }
 
 
     @Test
     void shouldReturnRecipeNotFoundException_whenSaveGetIsCalled() {
         RecipeNotFoundException thrown = Assertions.assertThrows(RecipeNotFoundException.class, () -> {
-            service.findOne(1000L);
+            service.findOne(1000L, "mahdi");
         });
         assertTrue(thrown.getMessage().contains("Could not find the recipe"));
     }
 
     @Test
     void shouldReturnRecipeStubbed_whenFindIsCalled() throws Exception {
-        Recipe entity = new Recipe("Smoky Rice", "You need to cook the rice with fire and coal", 1);
+        Recipe entity = new Recipe("Smoky Rice", "You need to cook the rice with fire and coal", 1,"mahdi");
         entity.setId(100L);
 
         // Arrange stub save method. It must return given entity.
-        when(repository.findById(100L)).thenReturn(Optional.of(entity));
+        when(repository.findByIdAndUsername(100L,"mahdi")).thenReturn(Optional.of(entity));
 
         RecipeDto expectedRecipeDto = mapper.toDto(entity);
 
         // Act
-        RecipeDto actualRecipeDto = service.findOne(100L);
-        verify(repository, times(1)).findById(100L);
+        RecipeDto actualRecipeDto = service.findOne(100L, "mahdi");
+        verify(repository, times(1)).findByIdAndUsername(100L,"mahdi");
         // Assert
         assertThat(actualRecipeDto, is(equalTo(expectedRecipeDto)));
     }
 
     @Test
     void shouldReturnRecipeStubbed_whenSaveIsCalled() throws Exception {
-        Recipe entity = new Recipe("Smoky Rice","You need to cook the rice with fire and coal",1);
-
+        Recipe entity = new Recipe("Smoky Rice", "You need to cook the rice with fire and coal", 1,"mahdi");
+        entity.setUsername("mahdi");
         // Arrange stub save method. It must return given entity.
         when(repository.save(any(Recipe.class))).thenReturn(entity);
 
@@ -92,10 +100,11 @@ class RecipeServiceSolitaryTest {
         // Act
         RecipeDto expectedRecipeDto = service.save(actualRecipeDto);
         //to verify if the save() method of the mocked repository has been called.
-        verify(repository,times(1)).save(any(Recipe.class)); //TODO
+        verify(repository, times(1)).save(any(Recipe.class)); //TODO
         // Assert
         assertThat(actualRecipeDto, is(equalTo(expectedRecipeDto)));
     }
+
     @Test
     void shouldCaptureSave_whenSaveIsCalled() {
 
@@ -109,20 +118,20 @@ class RecipeServiceSolitaryTest {
         Mockito.verify(repository).save(captor.capture());
         //Note: If the verified methods are called multiple times, then the getValue() method will return the latest captured value.
         assertEquals("Smoky Rice", captor.getValue().getTitle());
-        assertEquals(4,captor.getValue().getServe());
+        assertEquals(4, captor.getValue().getServe());
     }
 
     @Test
     void shouldCaptureSaveMultipleTimes_whenSaveIsCalled() {
-        Recipe entity1 = new Recipe("Smoky Rice1", "You need to cook the rice with fire and coal1", 1);
-        Recipe entity2 = new Recipe("Smoky Rice2", "You need to cook the rice with fire and coal2", 2);
-        Recipe entity3 = new Recipe("Smoky Rice3", "You need to cook the rice with fire and coal3", 3);
+        Recipe entity1 = new Recipe("Smoky Rice1", "You need to cook the rice with fire and coal1", 1,"mahdi");
+        Recipe entity2 = new Recipe("Smoky Rice2", "You need to cook the rice with fire and coal2", 2,"mahdi");
+        Recipe entity3 = new Recipe("Smoky Rice3", "You need to cook the rice with fire and coal3", 3,"mahdi");
 
         service.save(mapper.toDto(entity1));
         service.save(mapper.toDto(entity2));
         service.save(mapper.toDto(entity3));
 
-        Mockito.verify(repository,Mockito.times(3)).save(captor.capture());
+        Mockito.verify(repository, Mockito.times(3)).save(captor.capture());
 
         List<Recipe> recipeListExpected = captor.getAllValues();
 
@@ -133,83 +142,5 @@ class RecipeServiceSolitaryTest {
         assertEquals("Smoky Rice3", recipeListExpected.get(2).getTitle());
         assertEquals(3, recipeListExpected.get(2).getServe());
     }
-
-
-
-//    @Test
-//    void shouldReturnListOfRecipe_whenFindAllIsCalled() throws Exception {
-//        Recipe entity1 = new Recipe("Smoky Rice1", "You need to cook the rice with fire and coal1", 1);
-//        Recipe entity2 = new Recipe("Smoky Rice2", "You need to cook the rice with fire and coal2", 2);
-//        Recipe entity3 = new Recipe("Smoky Rice3", "You need to cook the rice with fire and coal3", 3);
-//        entity1.setId(100L);
-//        entity2.setId(200L);
-//        entity3.setId(300L);
-//
-//        List<RecipeDto> actualRecipeDtoList = List.of(mapper.toDto(entity1), mapper.toDto(entity2), mapper.toDto(entity3));
-////        Page<RecipeDto> findAll(Pageable pageable)
-//        Pageable pageable = PageRequest.of(0, 10);
-//        // Arrange stub save method. It must return given entity.
-////        Page<RecipeDto> findAll(Pageable pageable);
-//        Page<Recipe> recipePage = Mockito.mock(Page.class);
-//        List<Recipe> recipeListMock = Mockito.mock(List.class);
-//        when(repository.findAll(any(Pageable.class))).thenReturn(recipePage);
-//        // Act
-//        List<RecipeDto> recipeDtoList = service.findAll(pageable).getContent();
-//        //--------
-////
-//        verify(repository, times(1)).findAll(pageable);
-//
-//        // Assert
-//        assertThat(actualRecipeDtoList, is(equalTo(recipeDtoList)));
-//    }
-
-//    @Test//https://github.com/pkainulainen/spring-data-jpa-examples/blob/master/tutorial-part-eight/src/test/java/net/petrikainulainen/spring/datajpa/repository/PaginatingPersonRepositoryImplTest.java
-//    void findPersonsForPage() {//
-//        List<RecipeDto> expected = new ArrayList<>();
-//        Page foundPage = new PageImpl<RecipeDto>(expected);
-//
-//        Pageable pageable =PageRequest.of(0, 10);
-//        when(repository.findAll(any(Pageable.class))).thenReturn(foundPage);
-//
-//        List<RecipeDto> actual = service.findAll(pageable).getContent();
-//
-//        assertEquals(expected, actual);
-//
-//        ArgumentCaptor<Pageable> pageSpecificationArgument = ArgumentCaptor.forClass(Pageable.class);
-//        verify(repository, times(1)).findAll(pageSpecificationArgument.capture());
-//        verifyNoMoreInteractions(repository);
-////
-//        Pageable pageSpecification = pageSpecificationArgument.getValue();
-////
-//        assertEquals(1, pageSpecification.getPageNumber());
-//        assertEquals(PaginatingPersonRepositoryImpl.NUMBER_OF_PERSONS_PER_PAGE, pageSpecification.getPageSize());
-//        assertEquals(Sort.Direction.ASC, pageSpecification.getSort().getOrderFor(PROPERTY_LASTNAME).getDirection());
-//
-//    }
-
-
-//    @Test
-//    void findByIngredientsAndInstructionAndServeAndVegetarian() {
-//    }
-//
-//    @Test
-//    void findAll() {
-//    }
-//
-//    @Test
-//    void findOne() {
-//    }
-//
-//    @Test
-//    void save() {
-//    }
-//
-//    @Test
-//    void update() {
-//    }
-//
-//    @Test
-//    void delete() {
-//    }
 
 }

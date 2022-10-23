@@ -21,7 +21,6 @@ import java.util.List;
  * REST controller for managing Ingredient.
  */
 @Tag(name = "ingredient-controller for handling ingredient", description = "Get|Create the ingredient")
-@SecurityRequirement(name = "JWTtoken")
 @RestController
 @RequestMapping("/v1/ingredients")
 @Slf4j
