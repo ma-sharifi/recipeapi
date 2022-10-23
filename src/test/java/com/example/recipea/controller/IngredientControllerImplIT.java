@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 
 @IntegrationTest
-class IngredientControllerIT {
+class IngredientControllerImplIT {
 
     private static final String DEFAULT_TITLE = "oil";
     private static final String UPDATED_TITLE = "updated oil";

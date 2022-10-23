@@ -35,8 +35,6 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * Allow swagger load the data
-     * @param auth
-     * @throws Exception
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

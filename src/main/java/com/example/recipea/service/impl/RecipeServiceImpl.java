@@ -46,21 +46,13 @@ public class RecipeServiceImpl implements RecipeService {
         this.em=em;
     }
 
-    public List<RecipeDto> findByIngredientsAndInstructionAndServeAndVegetarian(String ingredient, String tag,
+    public List<RecipeDto> findByIngredientsAndInstructionAndServeAndVegetarian(String ingredient,
                                                                       String instruction, Boolean isveg, Integer serve) {
 
-        log.debug(" #ingredients = " + ingredient + ", tags = " + tag + ", instruction = " + instruction + ", isveg = " + isveg + ", serve = " + serve);
-        //---------
-        String[] tagsArray=null;
-        Set<String> tagsExclude=new HashSet<>();
-        Set<String> tagsInclude=new HashSet<>();
+        log.debug(" #ingredients = " + ingredient + ", instruction = " + instruction + ", isveg = " + isveg + ", serve = " + serve);
         Set<String> ingredientsInclude=new HashSet<>();
         Set<String> ingredientsExclude = new HashSet<>();
-        if(tag!=null) {
-           tagsArray = tag.split(",");//Gluten Free, Vegetarian,-Diet
-            tagsExclude = Arrays.stream(tagsArray).filter(t -> t.startsWith("-")).map(t -> tag.substring(1).trim()).collect(Collectors.toSet());
-            tagsInclude = Arrays.stream(tagsArray).filter(t -> !t.startsWith("-")).map(String::trim).collect(Collectors.toSet());
-        }
+
         String[] ingredientsArray=null;
          if(ingredient!=null) {
              ingredientsArray = ingredient.split(",");//Gluten Free, Vegetarian,-Diet
@@ -71,8 +63,6 @@ public class RecipeServiceImpl implements RecipeService {
         log.debug("#ingredientsArray-> " + ingredientsArray);
         log.debug("#ingredientsInclude-> " + ingredientsInclude);
         log.debug("#ingredientsExclude-> " + ingredientsExclude);
-        log.debug("#tagsInclude-> " + tagsInclude);
-        log.debug("#tagsExclude-> " + tagsExclude);
         //https://www.baeldung.com/spring-data-criteria-queries
         List<String> whereCause = new ArrayList<>();
         Map<Integer, Object> parameters = new HashMap<>();
@@ -121,11 +111,9 @@ public class RecipeServiceImpl implements RecipeService {
             counter++;
         }
 
-//        //----- TAG --------
         String queryNative = queryBuilder.append(StringUtils.join(whereCauseRecipe, " ")).toString().replace("${NOT}", not).replace("${WHERE}", StringUtils.join(whereCause, " "));
         log.debug("#queryNative: "+queryNative);
         Query jpaQuery = em.createNativeQuery(queryNative, Recipe.class);
-        //https://thorben-janssen.com/jpa-native-queries/
 
         for (Map.Entry<Integer, Object> entry: parameters.entrySet()) {
             jpaQuery.setParameter(entry.getKey(), entry.getValue());
@@ -145,6 +133,8 @@ public class RecipeServiceImpl implements RecipeService {
         return accountOptional.map(recipe -> recipeMapper.toDto(recipe,new CycleAvoidingMappingContext())).orElseThrow(() ->
                 new RecipeNotFoundException(id+""));
     }
+
+
 
     @Override
     public RecipeDto save(RecipeDto recipeDto) {

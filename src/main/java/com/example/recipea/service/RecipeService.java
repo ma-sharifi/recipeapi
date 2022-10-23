@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface RecipeService {
 
-    List<RecipeDto> findByIngredientsAndInstructionAndServeAndVegetarian(String ingredient, String tag,
+    List<RecipeDto> findByIngredientsAndInstructionAndServeAndVegetarian(String ingredient,
                                                                                 String instruction, Boolean isveg, Integer serve);
 
     RecipeDto save(RecipeDto recipeDto);

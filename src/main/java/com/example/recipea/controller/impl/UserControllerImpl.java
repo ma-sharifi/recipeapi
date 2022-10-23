@@ -1,5 +1,6 @@
-package com.example.recipea.controller;
+package com.example.recipea.controller.impl;
 
+import com.example.recipea.controller.UserController;
 import com.example.recipea.security.JwtTokenUtil;
 import com.example.recipea.service.dto.UserDto;
 import io.swagger.v3.oas.annotations.tags.Tag;

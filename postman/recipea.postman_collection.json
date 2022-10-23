@@ -316,6 +316,37 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "http://localhost:8080/v1/recipes/1",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/v1/recipes/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"recipes",
+										"1"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
@@ -447,7 +478,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/v1/recipes",
+							"raw": "http://localhost:8080/v1/recipes?sort=id,desc&page=0&size=2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -456,6 +487,20 @@
 							"path": [
 								"v1",
 								"recipes"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "id,desc"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "2"
+								}
 							]
 						}
 					},
@@ -599,6 +644,51 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "one recipe by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 using to have\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v1/recipes/7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"recipes",
+								"7"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -635,7 +725,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/v1/ingredients",
+							"raw": "http://localhost:8080/v1/ingredients?sort=id,asc&page=0&size=2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -644,6 +734,20 @@
 							"path": [
 								"v1",
 								"ingredients"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "id,asc"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "2"
+								}
 							]
 						}
 					},

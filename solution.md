@@ -1,6 +1,6 @@
 ## Solution: a short description of the solution and explaining some design decisions
 
-Ceated a standalone java application which allows **users** to manage their favourite recipes.
+Created a standalone java application which allows **users** to manage their favourite recipes.
 It should allow adding, updating, removing and fetching recipes.
 Additionally, users should be able to filter available recipes based on one or more criteria.
 
