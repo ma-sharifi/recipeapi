@@ -8,6 +8,7 @@ import com.example.recipea.service.dto.IngredientDto;
 import com.example.recipea.service.mapper.IngredientMapper;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -32,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 
 @IntegrationTest
+@DisplayName("Ingredient controller Integration test")
 class IngredientControllerImplIT {
 
     private static final String DEFAULT_TITLE = "oil";
@@ -115,27 +117,6 @@ class IngredientControllerImplIT {
         mockMvc.perform(get(ENTITY_API_URL_ID, Integer.MAX_VALUE))
                 .andExpect(status().isForbidden());
     }
-
-//    @Test
-//    @Transactional
-//    void checkTitleIsRequired() throws Exception {
-//        int databaseSizeBeforeTest = ingredientRepository.findAll().size();
-//        // set the field null
-//        ingredient.setTitle(null);
-//
-//        // Create the Ingredient, which fails.
-//        IngredientDto ingredientDto = ingredientMapper.toDto(ingredient);
-//
-//        mockMvc
-//                .perform(post(ENTITY_API_URL)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .header("Authorization", JWT)
-//                        .content(new Gson().toJson(ingredientDto)))
-//                .andExpect(status().isBadRequest());
-//
-//        List<Ingredient> ingredientList = ingredientRepository.findAll();
-//        assertThat(ingredientList).hasSize(databaseSizeBeforeTest);
-//    }
 
     @Test
     @Transactional

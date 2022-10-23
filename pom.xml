@@ -118,19 +118,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- Cucumber -->
-        <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-java -->
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-java</artifactId>
-            <version>${cucumber.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-core</artifactId>
-            <version>${cucumber.version}</version>
-        </dependency>
 
         <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-junit -->
         <dependency>
@@ -140,33 +127,11 @@
             <scope>test</scope>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.security</groupId>-->
-<!--            <artifactId>spring-security-test</artifactId>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-
-
-        <!--		<dependency>-->
-        <!--			<groupId>io.cucumber</groupId>-->
-        <!--			<artifactId>cucumber-junit-platform-engine</artifactId>-->
-        <!--			<version>${cucumber.version}</version>-->
-        <!--			<scope>test</scope>-->
-        <!--		</dependency>-->
-
-        <!--		&lt;!&ndash; https://mvnrepository.com/artifact/net.masterthought/cucumber-reporting &ndash;&gt;-->
-        <!--		<dependency>-->
-        <!--			<groupId>net.masterthought</groupId>-->
-        <!--			<artifactId>cucumber-reporting</artifactId>-->
-        <!--			<version>5.7.3</version>-->
-        <!--		</dependency>-->
-
-        <!--		&lt;!&ndash; To invoke REST endpoints from Cucumber step definitions &ndash;&gt;-->
-        <!--		<dependency>-->
-        <!--			<groupId>io.rest-assured</groupId>-->
-        <!--			<artifactId>rest-assured</artifactId>-->
-        <!--			<scope>test</scope>-->
-        <!--		</dependency>-->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 

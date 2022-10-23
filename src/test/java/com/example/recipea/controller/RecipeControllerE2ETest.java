@@ -6,6 +6,7 @@ import com.example.recipea.service.dto.RecipeDto;
 import com.example.recipea.service.dto.ResponseDto;
 import com.example.recipea.service.mapper.RecipeMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -23,13 +24,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Mahdi Sharifi
  */
 @EndToEndTest
+@DisplayName("Recipe controller End to End test")
 class RecipeControllerE2ETest {
 
     private static final String DEFAULT_TITLE = "Sushi E2E";
     private static final String DEFAULT_INSTRUCTION = "Sushi E2E is a Japanese dish of prepared vinegared rice, usually with some sugar and salt, accompanied by a variety of ingredients, such as seafood, often raw, and vegetables.";
     private static final Integer DEFAULT_SERVE = 100;
     private static final String ENTITY_API_URL = "/v1/recipes";
-    private static final String JWT = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg1OTQzLCJleHAiOjE2Njg5ODE1NDN9.v4ghT5iLyItNHJ70062INiUSbHkgYx1LvTcDwWXV1_mTS0RZ1IlAgQB1BaRUm7PB9Cb4B5eO1lvWq--CgNq7rQ";
+    private static final String JWT_MAHDI = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg1OTQzLCJleHAiOjE2Njg5ODE1NDN9.v4ghT5iLyItNHJ70062INiUSbHkgYx1LvTcDwWXV1_mTS0RZ1IlAgQB1BaRUm7PB9Cb4B5eO1lvWq--CgNq7rQ";
+    public static final String USERNAME_MAHDI = "mahdi";
     Recipe recipe;
     private String uri;
     @LocalServerPort
@@ -42,7 +45,7 @@ class RecipeControllerE2ETest {
     private TestRestTemplate restTemplate;
 
     public static Recipe createEntity() {
-        return new Recipe(DEFAULT_TITLE, DEFAULT_INSTRUCTION, DEFAULT_SERVE,"mahdi");
+        return new Recipe(DEFAULT_TITLE, DEFAULT_INSTRUCTION, DEFAULT_SERVE, USERNAME_MAHDI);
     }
 
     @PostConstruct
@@ -66,7 +69,7 @@ class RecipeControllerE2ETest {
         RecipeDto dto = recipeMapper.toDto(recipe);
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.add("Authorization", JWT);
+        headers.add("Authorization", JWT_MAHDI);
         HttpEntity<RecipeDto> entity = new HttpEntity<>(dto, headers);
         ResponseEntity<ResponseDto> responseEntityCreate = this.restTemplate.exchange(uri + ENTITY_API_URL, HttpMethod.POST, entity, ResponseDto.class);
 
@@ -89,7 +92,7 @@ class RecipeControllerE2ETest {
         RecipeDto dto = recipeMapper.toDto(recipe);
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.add("Authorization", JWT);
+        headers.add("Authorization", JWT_MAHDI);
         HttpEntity<RecipeDto> entity = new HttpEntity<>(dto, headers);
         ResponseEntity<ResponseDto> responseEntityCreate = this.restTemplate.exchange(uri + ENTITY_API_URL, HttpMethod.POST, entity, ResponseDto.class);
 
@@ -112,7 +115,7 @@ class RecipeControllerE2ETest {
         RecipeDto dto = recipeMapper.toDto(recipe);
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.add("Authorization", JWT);
+        headers.add("Authorization", JWT_MAHDI);
         HttpEntity<RecipeDto> entity = new HttpEntity<>(dto, headers);
         ResponseEntity<String> responseEntityCreated = this.restTemplate.exchange(uri + ENTITY_API_URL, HttpMethod.POST, entity, String.class);
 

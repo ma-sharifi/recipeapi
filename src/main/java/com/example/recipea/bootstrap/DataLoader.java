@@ -66,6 +66,5 @@ public class DataLoader implements CommandLineRunner {
 
         recipeRepository.save(recipeFrenchFries);
         log.debug("#Recipe_Rice: " + recipeFrenchFries);
-
     }
 }

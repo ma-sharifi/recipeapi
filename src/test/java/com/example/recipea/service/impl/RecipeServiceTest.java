@@ -1,45 +1,22 @@
 package com.example.recipea.service.impl;
 
-import com.example.recipea.entity.Ingredient;
 import com.example.recipea.entity.Recipe;
 import com.example.recipea.exception.BadRequestException;
 import com.example.recipea.exception.RecipeNotFoundException;
-import com.example.recipea.repository.RecipeRepository;
 import com.example.recipea.service.RecipeService;
-import com.example.recipea.service.dto.IngredientDto;
 import com.example.recipea.service.dto.RecipeDto;
-import com.example.recipea.service.dto.ResponseDto;
 import com.example.recipea.service.mapper.RecipeMapper;
-import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.transaction.Transactional;
-import javax.validation.ConstraintViolationException;
-import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 /**
  * @author Mahdi Sharifi
@@ -56,19 +33,16 @@ class RecipeServiceTest {
 
     private static final Integer DEFAULT_SERVE = 1;
     private static final Integer UPDATED_SERVE = 2;
-
+    private final String username = "mahdi";
     @Autowired
     RecipeService recipeService;
-
     @Autowired
     RecipeMapper mapper;
-
     private Recipe recipe;
-    private final String username="mahdi";
     private RecipeDto recipeDtoActual;
 
     public static Recipe createEntity() {
-        return new Recipe(DEFAULT_TITLE+"-"+ ThreadLocalRandom.current().nextInt(1000),DEFAULT_INSTRUCTION,DEFAULT_SERVE,"mahdi");
+        return new Recipe(DEFAULT_TITLE + "-" + ThreadLocalRandom.current().nextInt(1000), DEFAULT_INSTRUCTION, DEFAULT_SERVE, "mahdi");
     }
 
     @BeforeEach
@@ -79,7 +53,7 @@ class RecipeServiceTest {
     @Test
     void shouldReturnRecipeNotFoundException_whenRecipeIsNotFound() { //TODO
         RecipeNotFoundException exception = assertThrows(RecipeNotFoundException.class, () -> {
-            recipeService.findOne(10000L,"mahdi");
+            recipeService.findOne(10000L, "mahdi");
         });
         assertTrue(exception.getMessage().contains("Could not find the recipe"));
 
@@ -133,10 +107,10 @@ class RecipeServiceTest {
     @Transactional
     void shouldDeleteRecipe_whenDeleteIsCalled() {
         recipeDtoActual = recipeService.save(mapper.toDto(recipe));
-        recipeService.deleteByIdAndUsername(recipeDtoActual.getId(),username);
+        recipeService.deleteByIdAndUsername(recipeDtoActual.getId(), username);
 
-        RecipeNotFoundException exception= assertThrows(RecipeNotFoundException.class , ()->{
-            recipeService.findOne(recipeDtoActual.getId(),"mahdi") ;
+        RecipeNotFoundException exception = assertThrows(RecipeNotFoundException.class, () -> {
+            recipeService.findOne(recipeDtoActual.getId(), "mahdi");
         });
         assertTrue(exception.getMessage().contains("Could not find the recipe"));
 
@@ -146,16 +120,17 @@ class RecipeServiceTest {
     @Transactional
     void shouldThrowEmptyResultDataAccessException_whenDeleteIsCalled2Times() {
         recipeDtoActual = recipeService.save(mapper.toDto(recipe));
-        recipeService.deleteByIdAndUsername(recipeDtoActual.getId(),username);
+        recipeService.deleteByIdAndUsername(recipeDtoActual.getId(), username);
 
-        RecipeNotFoundException exception= assertThrows(RecipeNotFoundException.class , ()->{
-            recipeService.deleteByIdAndUsername(recipeDtoActual.getId(),username);
+        RecipeNotFoundException exception = assertThrows(RecipeNotFoundException.class, () -> {
+            recipeService.deleteByIdAndUsername(recipeDtoActual.getId(), username);
         });
         assertTrue(exception.getMessage().contains("Could not find the recipe"));
     }
 
     @Test
-    @Transactional//Mandatory
+    @Transactional
+//Mandatory
     void shouldFindOneRecipe_whenFindOneIsCalled() {
         recipeDtoActual = recipeService.save(mapper.toDto(recipe));
         assertNotNull(recipeDtoActual);
@@ -164,7 +139,7 @@ class RecipeServiceTest {
         assertEquals(DEFAULT_INSTRUCTION, recipeDtoActual.getInstruction());
         assertEquals(DEFAULT_SERVE, recipeDtoActual.getServe());
 
-        RecipeDto recipeDtoExpected= recipeService.findOne(recipeDtoActual.getId(),"mahdi");
+        RecipeDto recipeDtoExpected = recipeService.findOne(recipeDtoActual.getId(), "mahdi");
 
         assertNotNull(recipeDtoExpected);
         assertNotNull(recipeDtoExpected.getId());

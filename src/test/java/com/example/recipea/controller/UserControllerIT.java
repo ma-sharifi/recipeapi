@@ -5,6 +5,7 @@ import com.example.recipea.security.JwtTokenUtil;
 import com.example.recipea.service.dto.UserDto;
 import com.google.gson.Gson;
 import io.jsonwebtoken.Claims;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -21,7 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 
 @IntegrationTest
- class UserControllerIntegrationTest {
+@DisplayName("User controller Integration test")
+ class UserControllerIT {
 
     @Autowired
     private MockMvc mockMvc;

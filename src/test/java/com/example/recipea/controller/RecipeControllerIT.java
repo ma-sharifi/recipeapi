@@ -9,18 +9,12 @@ import com.example.recipea.repository.IngredientRepository;
 import com.example.recipea.repository.RecipeRepository;
 import com.example.recipea.service.RecipeService;
 import com.example.recipea.service.dto.CycleAvoidingMappingContext;
-import com.example.recipea.service.dto.IngredientDto;
 import com.example.recipea.service.dto.RecipeDto;
 import com.example.recipea.service.dto.ResponseDto;
 import com.example.recipea.service.mapper.RecipeMapper;
-import com.example.recipea.util.LocalDateTimeDeserializer;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,16 +23,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Type;
-import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.example.recipea.util.ConvertorUtil.toResponseDto;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,11 +38,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the Recipe Endpoint REST controller.
  */
 @IntegrationTest
+@DisplayName("Recipe controller Integration test")
 class RecipeControllerIT {
 
-    private static final String USERNAME = "mahdi";
+    private static final String USERNAME_MAHDI = "mahdi";
+    private static final String USERNAME_ALEX = "alex";
     private static final String DEFAULT_TITLE = "Sushi";
-    private static final String UPDATED_TITLE = "updated Sushi";
 
     private static final String DEFAULT_INSTRUCTION = "Sushi is a Japanese dish of prepared vinegared rice, usually with some sugar and salt, accompanied by a variety of ingredients, such as seafood, often raw, and vegetables.";
     private static final String UPDATED_INSTRUCTION = "Updated Sushi is a Japanese dish of prepared vinegared rice, usually with some sugar and salt, accompanied by a variety of ingredients, such as seafood, often raw, and vegetables. ";
@@ -66,14 +54,17 @@ class RecipeControllerIT {
     private static final String ENTITY_API_URL = "/v1/recipes";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
-    private static final String JWT = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg1OTQzLCJleHAiOjE2Njg5ODE1NDN9.v4ghT5iLyItNHJ70062INiUSbHkgYx1LvTcDwWXV1_mTS0RZ1IlAgQB1BaRUm7PB9Cb4B5eO1lvWq--CgNq7rQ";
-    Predicate<IngredientDto> isSalmon = i -> i.getTitle().equals("salmon");
+    private static final String JWT_MAHDI = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg1OTQzLCJleHAiOjE2Njg5ODE1NDN9.v4ghT5iLyItNHJ70062INiUSbHkgYx1LvTcDwWXV1_mTS0RZ1IlAgQB1BaRUm7PB9Cb4B5eO1lvWq--CgNq7rQ";
+    private static final String JWT_ALEX = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoiYWxleCIsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE2NjY1NjAwOTAsImV4cCI6MTY2OTE1NTY5MH0.5rRG9qp1qQL73l-g5eK0W1TIB3sba1W-sd_PCJg7lF5FxS5Q7tdFTj13NqyDcGkgLmtjXN48ruDo7Perq6yhxQ";
     @Autowired
     private RecipeRepository recipeRepository;
-    @Autowired
-    private RecipeService recipeService;
+
     @Autowired
     private IngredientRepository ingredientRepository;
+
+    @Autowired
+    private RecipeService recipeService;
+
     @Autowired
     private RecipeMapper recipeMapper;
     @Autowired
@@ -82,8 +73,9 @@ class RecipeControllerIT {
     int randomInt= 1;
 
     public static Recipe createEntity() {
-        return new Recipe(DEFAULT_TITLE, DEFAULT_INSTRUCTION, DEFAULT_SERVE,"mahdi");
+        return new Recipe(DEFAULT_TITLE, DEFAULT_INSTRUCTION, DEFAULT_SERVE, USERNAME_MAHDI);
     }
+
 
     @BeforeEach
     public void initTest() {
@@ -91,50 +83,43 @@ class RecipeControllerIT {
         recipe = createEntity();
     }
 
-    public void saveData() {
-//        Ingredient ingredientOil = new Ingredient("oil");
-//        ingredientRepository.save(ingredientOil);
-//        Ingredient ingredientSalmon = new Ingredient("salmon");
-//        ingredientRepository.save(ingredientSalmon);
-//
-//        Ingredient ingredientPotato = new Ingredient("potatoes");
-//        ingredientRepository.save(ingredientPotato);
-//
-//        Recipe recipeSalmonKabab = new Recipe();
-//        recipeSalmonKabab.setTitle("Salmon Kabab2");
-//        recipeSalmonKabab.setServe(1);
-//        recipeSalmonKabab.addIngredient(ingredientOil);
-//        recipeSalmonKabab.addIngredient(ingredientSalmon);
-//        recipeSalmonKabab.setInstruction("This kabab cooked by stove");
-//        recipeSalmonKabab.setUsername("mahdi");
-//
-//        recipeRepository.save(recipeSalmonKabab);
-//        //----------------
-//        Recipe recipeRice = new Recipe("French fries2", "Cook potato on oven", 4);
-//        recipeRice.setVegetarian(true);
-//        recipeRice.addIngredient(ingredientPotato);
-//        recipeRice.addIngredient(ingredientOil);
-//        recipeRice.setUsername("mahdi");
-//
-//        recipeRepository.save(recipeRice);
-    }
-
     /**
      * In Integration test you must test every dependency. Becasue of these dependencies it takes more than other test types.
      */
 
     @Test
-    @Transactional
     void shouldReturnAllVegetarian_whenIsVegIsTrue() throws Exception {
-        // Initialize the database
-        saveData();
         // run query, we expect get the same result from endpoint.
         List<RecipeDto> listSearched = recipeService
-                .findByIngredientsAndInstructionAndServeAndVegetarian( null, null, true, null,USERNAME);
+                .findByIngredientsAndInstructionAndServeAndVegetarian( null, null, true, null, USERNAME_MAHDI);
 
         // Get all the recipeList
         MockHttpServletResponse responseMockMvc= mockMvc
-                .perform(get(ENTITY_API_URL + "/search?isveg=true").header("Authorization", JWT))
+                .perform(get(ENTITY_API_URL + "/search?isveg=true").header("Authorization", JWT_MAHDI))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.payload[*].vegetarian",hasItems(true)))
+                .andReturn().getResponse();
+
+        // then convert json string to object ResponseDto<RecipeDto>
+        ResponseDto<RecipeDto> responseDto = toResponseDto(responseMockMvc.getContentAsString());
+        // The result of repository must be equal with result of the endpoint
+        assertEquals(listSearched, responseDto.getPayload());
+
+        long countNonVeg = responseDto.getPayload().stream().filter(RecipeDto::getVegetarian).count();
+        assertEquals(countNonVeg, responseDto.getPayload().size());
+    }
+    @Test
+    void shouldReturnAllVegetarianBelongToAlex_whenIsVegIsTrue() throws Exception {
+        // Initialize the database
+        saveRecipeDataForAlex();
+        // run query, we expect get the same result from endpoint.
+        List<RecipeDto> listSearched = recipeService
+                .findByIngredientsAndInstructionAndServeAndVegetarian( null, null, true, null,USERNAME_ALEX);
+        // Get all the recipeList
+        MockHttpServletResponse responseMockMvc= mockMvc
+                .perform(get(ENTITY_API_URL + "/search?isveg=true")
+                        .header("Authorization", JWT_ALEX))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.payload[*].vegetarian",hasItems(true)))
@@ -150,17 +135,14 @@ class RecipeControllerIT {
     }
 
     @Test
-    @Transactional
     void shouldReturnNonVegetarian_whenIsVegIsFalse() throws Exception {
-        // Initialize the database
-        saveData();
         // run query, we expect get the same result from endpoint.
         List<RecipeDto> listSearched = recipeService
-                .findByIngredientsAndInstructionAndServeAndVegetarian(null , null, false, null,USERNAME);
+                .findByIngredientsAndInstructionAndServeAndVegetarian(null , null, false, null, USERNAME_MAHDI);
 
         // Get all the recipeList
         MockHttpServletResponse responseMockMvc = mockMvc
-                .perform(get(ENTITY_API_URL + "/search?isveg=false").header("Authorization", JWT))
+                .perform(get(ENTITY_API_URL + "/search?isveg=false").header("Authorization", JWT_MAHDI))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.payload[*].vegetarian",hasItems(false)))
@@ -179,15 +161,13 @@ class RecipeControllerIT {
      * Recipes that can serve 4 persons and have “potatoes” as an ingredient: ?serve=4&ingredient=potatoes
      */
     @Test
-    @Transactional
     void shouldReturnRecipesForServe4PersonsAndPotatoesIngredient_whenServe4AndIngredientPotatoesIsCalled() throws Exception {
         // Initialize the database
-        saveData();
         // run query, we expect get the same result from endpoint.
-        List<RecipeDto> listSearched = recipeService.findByIngredientsAndInstructionAndServeAndVegetarian("potatoes",  null, null, 4,USERNAME);
+        List<RecipeDto> listSearched = recipeService.findByIngredientsAndInstructionAndServeAndVegetarian("potatoes",  null, null, 4, USERNAME_MAHDI);
         // Get all the recipeList
         MockHttpServletResponse responseMockMvc = mockMvc
-                .perform(get(ENTITY_API_URL + "/search?serve=4&ingredient=potatoes").header("Authorization", JWT))
+                .perform(get(ENTITY_API_URL + "/search?serve=4&ingredient=potatoes").header("Authorization", JWT_MAHDI))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.payload").exists())
@@ -207,25 +187,51 @@ class RecipeControllerIT {
         // all recipes must have oven
         long countServe = responseDto.getPayload().stream().filter(recipe -> recipe.getServe()==4).count();
         assertEquals(countServe, responseDto.getPayload().size());
+    }
+    @Test
+    void shouldReturnRecipesForServe4PersonsAndPotatoesIngredientBelongToAlex_whenServe4AndIngredientPotatoesIsCalled() throws Exception {
+        // Initialize the database
+        saveRecipeDataForAlex();
+        // run query, we expect get the same result from endpoint.
+        List<RecipeDto> listSearched = recipeService.findByIngredientsAndInstructionAndServeAndVegetarian("potatoes",  null, null, 4, USERNAME_ALEX);
+        // Get all the recipeList
+        MockHttpServletResponse responseMockMvc = mockMvc
+                .perform(get(ENTITY_API_URL + "/search?serve=4&ingredient=potatoes").header("Authorization", JWT_ALEX))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.payload").exists())
+                .andExpect(jsonPath("$.payload[*].ingredients[*].title", hasItems("potatoes")))//OK
+                .andExpect(jsonPath("$.payload[*].serve", hasItems(4)))
+                .andReturn().getResponse();
 
+        // then convert json string to object ResponseDto<RecipeDto>
+        ResponseDto<RecipeDto> responseDto = toResponseDto(responseMockMvc.getContentAsString());
+        // The result of repository must be equal with result of the endpoint
+        assertEquals(listSearched, responseDto.getPayload());
+
+        //Each recipe must have potatoes
+        long sizePotatoRecipe= responseDto.getPayload().stream()
+                .filter(recipe -> recipe.getIngredients().stream().anyMatch(ingredientDto -> ingredientDto.getTitle().contains("potatoes"))).count();
+        assertEquals(sizePotatoRecipe,responseDto.getPayload().size());
+        // all recipes must have oven
+        long countServe = responseDto.getPayload().stream().filter(recipe -> recipe.getServe()==4).count();
+        assertEquals(countServe, responseDto.getPayload().size());
     }
 
     /**
      *  Recipes without “salmon” as an ingredient that has “oven” in the instructions: ?ingredient=-salmon&instruction=oven
      */
     @Test
-    @Transactional
     void shouldReturnRecipesWithoutSalmonIngredientWithOvenInstruction_whenIngredientMinusSalmonAndInstructionStoveIsCalled() throws Exception {
 
         // Initialize the database
-        saveData();
         // run query, we expect get the same result from endpoint.
         List<RecipeDto> listSearched = recipeService
-                .findByIngredientsAndInstructionAndServeAndVegetarian("-salmon", "oven", null, null,USERNAME);
+                .findByIngredientsAndInstructionAndServeAndVegetarian("-salmon", "oven", null, null, USERNAME_MAHDI);
 
         // search all the recipeList from endpoint
         MockHttpServletResponse responseMockMvc = mockMvc
-                .perform(get(ENTITY_API_URL + "/search?ingredient=-salmon&instruction=oven").header("Authorization", JWT))
+                .perform(get(ENTITY_API_URL + "/search?ingredient=-salmon&instruction=oven").header("Authorization", JWT_MAHDI))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.payload").exists())
@@ -252,7 +258,7 @@ class RecipeControllerIT {
     void shouldGetNotFound_whenPathIsNotExist() throws Exception {
         mockMvc.perform(
                         get(ENTITY_API_URL + "/not/existing-path")
-                                .header("Authorization", JWT)
+                                .header("Authorization", JWT_MAHDI)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
@@ -267,7 +273,7 @@ class RecipeControllerIT {
         //add new recipe into database via our endpoint
         mockMvc.perform(
                         post(ENTITY_API_URL)
-                                .header("Authorization", JWT)
+                                .header("Authorization", JWT_MAHDI)
                                 .contentType(MediaType.APPLICATION_JSON).content(new Gson().toJson(recipeDto)))
                 .andExpect(status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.error_code").value(0))
@@ -282,7 +288,7 @@ class RecipeControllerIT {
         //shouldJdbcSQLIntegrityConstraintViolationExceptionWithDuplicateRecipeTitleAndUsername_whenCreateRecipeIsCalled
         mockMvc.perform(
                         post(ENTITY_API_URL)
-                                .header("Authorization", JWT)
+                                .header("Authorization", JWT_MAHDI)
                                 .contentType(MediaType.APPLICATION_JSON).content(new Gson().toJson(recipeDto)))//Duplicate Title and Username
                 .andExpect(status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.error_code").value(4005));
@@ -299,7 +305,7 @@ class RecipeControllerIT {
 
         MvcResult mvcResult = mockMvc.perform(
                         post(ENTITY_API_URL)
-                                .header("Authorization", JWT)
+                                .header("Authorization", JWT_MAHDI)
                                 .contentType(MediaType.APPLICATION_JSON).content(new Gson().toJson(recipeDto)))
                 .andExpect(status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.error_code").value(0))
@@ -324,7 +330,7 @@ class RecipeControllerIT {
 
         mockMvc.perform(
                         put(urlSavedRecipe)
-                                .header("Authorization", JWT)
+                                .header("Authorization", JWT_MAHDI)
                                 .contentType(MediaType.APPLICATION_JSON).content(new Gson().toJson(recipeMapper.toDto(recipeLoadedFromDb))))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.error_code").value(0))
@@ -346,7 +352,7 @@ class RecipeControllerIT {
 
         //Read the data of saved recipe from endpoint then test them
         mockMvc.perform(get(ENTITY_API_URL + "/" + recipe.getId())
-                        .header("Authorization", JWT)
+                        .header("Authorization", JWT_MAHDI)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.error_code").value(0))
@@ -362,7 +368,7 @@ class RecipeControllerIT {
 
         //Read the data of saved recipe from endpoint then test them
         mockMvc.perform(delete(ENTITY_API_URL + "/" + recipe.getId())
-                        .header("Authorization", JWT)
+                        .header("Authorization", JWT_MAHDI)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
@@ -380,7 +386,7 @@ class RecipeControllerIT {
 
         // Get all the recipeList
         mockMvc
-                .perform(get(ENTITY_API_URL).header("Authorization", JWT))
+                .perform(get(ENTITY_API_URL).header("Authorization", JWT_MAHDI))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.payload[*].id").value(hasItem(recipe.getId().intValue())))
@@ -401,7 +407,7 @@ class RecipeControllerIT {
         // An entity with an existing ID cannot be created, so this API call must fail
         mockMvc
                 .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", JWT)
+                        .header("Authorization", JWT_MAHDI)
                         .contentType(MediaType.APPLICATION_JSON).content(new Gson().toJson(recipeDto)))
                 .andExpect(status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.error_code").value(4001))
@@ -425,7 +431,7 @@ class RecipeControllerIT {
 
         mockMvc
                 .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", JWT)
+                        .header("Authorization", JWT_MAHDI)
                         .content(new Gson().toJson(recipeDto)))
                 .andExpect(status().isBadRequest());
 
@@ -446,7 +452,7 @@ class RecipeControllerIT {
 
         mockMvc
                 .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", JWT)
+                        .header("Authorization", JWT_MAHDI)
                         .content(new Gson().toJson(recipeDto)))
                 .andExpect(status().isBadRequest());
 
@@ -467,7 +473,7 @@ class RecipeControllerIT {
 
         mockMvc
                 .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", JWT)
+                        .header("Authorization", JWT_MAHDI)
                         .content(new Gson().toJson(recipeDto)))
                 .andExpect(status().isBadRequest());
 
@@ -480,7 +486,7 @@ class RecipeControllerIT {
     void shouldThrowRecipeNotFoundException_whenNonExistingRecipeIsCalled() throws Exception {
         // Get the non-existing recipe
         mockMvc.perform(get(ENTITY_API_URL_ID, Integer.MAX_VALUE)
-                        .header("Authorization", JWT))
+                        .header("Authorization", JWT_MAHDI))
                 .andExpect(status().isNotFound())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.error_code").value(4041))
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof RecipeNotFoundException));
@@ -497,7 +503,7 @@ class RecipeControllerIT {
     void shouldThrowMethodArgumentTypeMismatchException_whenFindRecipeWithMisMatchIdIsCalled() throws Exception {
         mockMvc.perform(
                         get(ENTITY_API_URL + "/1$")
-                                .header("Authorization", JWT)
+                                .header("Authorization", JWT_MAHDI)
                                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.error_code").value(4006))
@@ -508,9 +514,26 @@ class RecipeControllerIT {
     void shouldMethodNotAllowed_whenFindRecipeByPostMethodIsCalled() throws Exception {
         mockMvc.perform(
                         post(ENTITY_API_URL + "/1")
-                                .header("Authorization", JWT)
+                                .header("Authorization", JWT_MAHDI)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isMethodNotAllowed());
+    }
+
+    void saveRecipeDataForAlex() {
+        List<Ingredient> ingredientList=ingredientRepository.findAll();//read all saved ingredient
+
+        Recipe recipeSalmonKabab = new Recipe("Salmon Kabab-"+ThreadLocalRandom.current().nextInt(100), "This kabab cooked by stove", 4,"alex");
+        for (Ingredient ingredient:ingredientList) {
+            recipeSalmonKabab.addIngredient(ingredient);
+        }
+        recipeRepository.saveAndFlush(recipeSalmonKabab);
+        //----------------
+        Recipe recipeFrenchFries = new Recipe("French fries-"+ThreadLocalRandom.current().nextInt(100), "Cook potato on oven", 1,"alex");
+        recipeFrenchFries.setVegetarian(true);
+        for (int i = 0; i <= ingredientList.size()/2; i++) {
+            recipeFrenchFries.addIngredient(ingredientList.get(i));
+        }
+        recipeRepository.saveAndFlush(recipeFrenchFries);
     }
 
 }

@@ -15,7 +15,7 @@ class IngredientTest {
     Ingredient ingredient;
 
     @Test
-    void testIngredient() { //TODO Split it to smaller method one thing must do
+    void testIngredient() {
         Ingredient ingredient1 = new Ingredient("salt");
         ingredient1.setId(1L);
         Recipe recipe=new Recipe("sushi", "instruction", 1,"mahdi");

@@ -37,7 +37,7 @@ class ResponseDtoTest {
     }
 
     @Test
-    void testDto1()  {
+    void shouldBeEqual()  {
         UserDto dto1=new UserDto("mahdi","my bearer token");
         UserDto dto2=new UserDto("mahdi","my bearer token");
 

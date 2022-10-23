@@ -30,11 +30,12 @@ All these requirements needs to be satisfied:
 6. Integration tests must be present
 
 ## Solution:
-Created a standalone java application which allows **users** to manage their favourite recipes.
+Created a standalone java application which allows **users** to manage their favourite recipes. Each user has own favorite recipe. 
 Used Java 11, Spring Boot, Maven for implementing this assigment.
 A short description of my solution and explaining some design decisions, you can find [here](solution.md)
 
 ## Assumption
+We have 2 different user. Mahdi and Alex are our users here. Mahdi can manage his list without effect on Alex's favorite list.
 My assumptions when solving the challenge, you can find [here](assumptions.md)
 
 ### How To Use
@@ -42,7 +43,7 @@ To clone and run this application, you'll need [Git](https://git-scm.com), [Mave
 * A short explanation about how to run the solution with all the needed parts, you can find [here](how_to_run.md)
 
 ### Database diagram
-For handling this assignment At least we need 2 entities. 
+For handling this assignment At least we need 2 entities. One use can't have 2 recipe with one title. 
 ![database](https://user-images.githubusercontent.com/8404721/197364029-7958b7f5-7d3a-4606-9c07-90c66f71dc75.jpg)
 
 
@@ -50,7 +51,7 @@ For handling this assignment At least we need 2 entities.
 Provided three endpoints for handling, recipes, ingredients ,and users.
 ![request-flow-racipea-1](https://user-images.githubusercontent.com/8404721/197363470-8607b704-ae6d-425c-bb4e-1b03548d4e13.jpg)
 
-### Logg and debugging
+### Log and debugging
 If `log debug mode` is activated, you can see the `details` of the error in the response.
 * Notes: Do not active `log debug mode` in the production. By default it is deactivated.
 
@@ -65,9 +66,8 @@ Give your username '/v1/users/login' and get the Bearer Token,Then click on Auth
 
 ## Test Coverage
 * 100% Class
-* 96% Method
-* 93% Line
-
+* 95% Method
+* 92% Line
 
 ### Provided 4 different ways for test the application:
 1. [Swagger](http://localhost:8080/swagger-ui/index.html)
