@@ -27,7 +27,7 @@ public class Ingredient extends BaseEntity {
     private String title;
 
     //The mappedBy attribute of the recipes here marks that, in this bidirectional relationship, the Recipe entity owns the association.
-    @JsonIgnoreProperties(value = {"ingredients", "parent", "tags"}, allowSetters = true)
+    @JsonIgnoreProperties(value = {"ingredients", "parent"}, allowSetters = true)
     @ManyToMany(mappedBy = "ingredients")
     //bidirectional relationship-> you must use mappedBy on one side of the relationship, otherwise it will be assumed to be two different relationships and you will get duplicate rows inserted into the join table.
     private Set<Recipe> recipes = new HashSet<>();

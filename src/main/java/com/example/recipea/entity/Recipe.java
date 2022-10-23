@@ -42,10 +42,6 @@ public class Recipe extends BaseEntity {
     @Column(name = "USERNAME", length = 60)
     private String username;
 
-//    @ManyToOne
-//    @JsonIgnoreProperties(value = {"ingredients", "parent", "tags"}, allowSetters = true)
-//    private Recipe parent;
-
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "JND_RECIPE_INGREDIENT",
@@ -89,7 +85,6 @@ public class Recipe extends BaseEntity {
                 "id=" + getId() +
                 ", title='" + getTitle() + "'" +
                 ", ingredients='" + getIngredients() + "'" +
-//            ", tags='" + getTags() + "'" +
                 ", instruction='" + getInstruction() + "'" +
                 ", serve=" + getServe() +
                 "}";

@@ -130,7 +130,7 @@ class RecipeControllerIT {
         saveData();
         // run query, we expect get the same result from endpoint.
         List<RecipeDto> listSearched = recipeService
-                .findByIngredientsAndInstructionAndServeAndVegetarian(null , null, null, true, null);
+                .findByIngredientsAndInstructionAndServeAndVegetarian( null, null, true, null);
 
         // Get all the recipeList
         MockHttpServletResponse responseMockMvc= mockMvc
@@ -156,7 +156,7 @@ class RecipeControllerIT {
         saveData();
         // run query, we expect get the same result from endpoint.
         List<RecipeDto> listSearched = recipeService
-                .findByIngredientsAndInstructionAndServeAndVegetarian(null , null, null, false, null);
+                .findByIngredientsAndInstructionAndServeAndVegetarian(null , null, false, null);
 
         // Get all the recipeList
         MockHttpServletResponse responseMockMvc = mockMvc
@@ -184,7 +184,7 @@ class RecipeControllerIT {
         // Initialize the database
         saveData();
         // run query, we expect get the same result from endpoint.
-        List<RecipeDto> listSearched = recipeService.findByIngredientsAndInstructionAndServeAndVegetarian("potatoes", null, null, null, 4);
+        List<RecipeDto> listSearched = recipeService.findByIngredientsAndInstructionAndServeAndVegetarian("potatoes",  null, null, 4);
         // Get all the recipeList
         MockHttpServletResponse responseMockMvc = mockMvc
                 .perform(get(ENTITY_API_URL + "/search?serve=4&ingredient=potatoes").header("Authorization", JWT))
@@ -221,7 +221,7 @@ class RecipeControllerIT {
         saveData();
         // run query, we expect get the same result from endpoint.
         List<RecipeDto> listSearched = recipeService
-                .findByIngredientsAndInstructionAndServeAndVegetarian("-salmon", null, "oven", null, null);
+                .findByIngredientsAndInstructionAndServeAndVegetarian("-salmon", "oven", null, null);
 
         // search all the recipeList from endpoint
         MockHttpServletResponse responseMockMvc = mockMvc

@@ -3,13 +3,12 @@
 This application is written with Java 11 and is compatible with java 17.
 You can give a profile as a parameter. Without a profile, it will use by default.
 
-### property for profile
-Provided an environement.property variable for showing which profile is chosen.
-```shell
-environement:
-  property: I AM THE DEFAULT | I AM PROD
-```
-### run
+### Initial Configuration
+1. Apache Maven (http://maven.apache.org) This code has been compiled with Java version 11.
+2. Git Client (http://git-scm.com)
+3. Clone repository from [here](https://github.com/ma-sharifi/recipeapi)
+
+### Run
 ```shell
 mvn spring-boot:run
 mvn spring-boot:run -Dspring-boot.run.profiles=prod
@@ -31,8 +30,15 @@ java -jar target/recipea.jar
 Also, you can change below properties and `application.yaml` in defualt profile and `application-prod.yaml` in production file.
 this is the key for JWT we used. for production you need use a strong key
 >jwt.secret=mySecretKey
+> 
+### property for profile
+Provided an environement.property variable for showing which profile is chosen.
+```shell
+environement:
+  property: I AM THE DEFAULT | I AM PROD
+```
 
-### log file
+### Log file
 The level of log in default mode is DEBUG and in production by defualt is INFO.
 You can change t in `application` properties file
 
@@ -52,7 +58,7 @@ logging:
         com.example: INFO
 ```
 
-### database
+### Database
 Used a H2 database for default profile
 
 ```shell

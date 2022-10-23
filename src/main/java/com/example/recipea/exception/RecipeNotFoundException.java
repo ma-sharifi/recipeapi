@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 
 /**
  * @author Mahdi Sharifi
- * When Movie not found throw this exception
+ * When entity not found throw this exception
  */
 @Getter
 public class RecipeNotFoundException extends AbstractThrowable {

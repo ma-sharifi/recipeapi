@@ -1,8 +1,8 @@
-package com.example.recipea.controller;
+package com.example.recipea.controller.impl;
 
+import com.example.recipea.controller.RecipeController;
 import com.example.recipea.exception.BadRequestException;
 import com.example.recipea.security.AuthenticationFacade;
-import com.example.recipea.service.IngredientService;
 import com.example.recipea.service.RecipeService;
 import com.example.recipea.service.dto.RecipeDto;
 import com.example.recipea.service.dto.ResponseDto;
@@ -54,12 +54,11 @@ public class RecipeControllerImpl implements RecipeController {
     public ResponseEntity<ResponseDto<RecipeDto>> searchRecipes(
             @RequestParam(required = false) Integer serve,
             @RequestParam(required = false, defaultValue = "") String ingredient, //ingredient=rice,salt,-oil
-            @RequestParam(required = false, defaultValue = "") String tag, //tag=Gluten Free, Vegetarian,-Diet
             @RequestParam(required = false) String instruction, //include
             @RequestParam(required = false) Boolean isveg //include
 
     ) {
-        List<RecipeDto> recipeDtoList = recipeService.findByIngredientsAndInstructionAndServeAndVegetarian(ingredient, tag, instruction, isveg, serve);
+        List<RecipeDto> recipeDtoList = recipeService.findByIngredientsAndInstructionAndServeAndVegetarian(ingredient, instruction, isveg, serve);
         log.debug("#searchRecipes is called: " + recipeDtoList);
         ResponseDto<RecipeDto> responseDto = new ResponseDto<>(recipeDtoList);
         return ResponseEntity.ok().body(responseDto);

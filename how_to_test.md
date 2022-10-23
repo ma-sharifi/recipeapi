@@ -20,6 +20,10 @@ I described all APIs here
  *Note: For post because I put the URL of the created entity in the Location HTTP Header, we can remove the body from the response.
 2. Get list of all recipes
  * **GET**`/v1/recipes` HTTP Status: 200
+ * Provided by paging. You can use it this way in this service: ?sort=id,desc&page=0&size=2
+ * `sort=id,desc` it means sort by id by descending order (use asc for ascending). Id is the field of recipe.
+ * size=2 it means paginate the result such a way there are 2 items per page.
+ * page=0 just return page 0 not any other pages.
 3. Get a recipe by its `id`.
  * **GET**`/v1/recipes/{id}` HTTP Status: 200
 4. Delete a recipe
