@@ -10,11 +10,11 @@ It explains what needs to be done to use the service
 ### API
 I described all APIs here
 
-#### User /v1/users
+#### 1. User /v1/users
 1. Issue a bearer token.
 * **POST**`/v1/users/login` HTTP Status: 200
 
-#### Recipe /v1/recipes
+#### 2. Recipe /v1/recipes
 1. Users can create(add) recipe
  * **POST**`/v1/recipes` HTTP Status: 201
  *Note: For post because I put the URL of the created entity in the Location HTTP Header, we can remove the body from the response.
@@ -31,7 +31,7 @@ I described all APIs here
 5. Search recipe with given criteria
 * **GET**`/v1/recipes/search` HTTP Status: 200
 
-#### Ingredient /v1/ingredients
+#### 3. Ingredient /v1/ingredients
 1. Users can create(add) ingredient
 * **POST**`/v1/ingredients` HTTP Status: 201
 2. Get list of all ingredients
@@ -52,10 +52,17 @@ Call API '/v1/users/login' with your username and get the Bearer Token, Then cli
 ### /v1/users/login
 * Get a bearer token
   **POST**`/v1/users/login`
+
+#### Request:
 ```bash
   http --form POST localhost:8080/v1/users/login username=mahdi
 ```
-Result:
+#### Successful response:
+```bash
+HTTP/1.1 200
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2NTM3MzMzLCJleHAiOjE2NjkxMzI5MzN9.cfzE-SuRIi1ClUi7a_O3AkKZBHUCapHapZZi1veLcas3c1iXu88f_RjQTY6sFwH_237pHmwEIPqparhf6qm6Rg
+```
+
 ```json
 {
   "token": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2NTE4MjQzLCJleHAiOjE2NjkxMTM4NDN9._oXNQgqgOFaRLieLYq9cSLkreFeFz4XyeI9w5e_Cu8J2cUlSQUMg_urvG07Nh1o4Ufk3jQkon1i9qW8iLKbYBw",
