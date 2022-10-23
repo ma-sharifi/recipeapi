@@ -6,6 +6,7 @@ import com.example.recipea.security.AuthenticationFacade;
 import com.example.recipea.service.RecipeService;
 import com.example.recipea.service.dto.RecipeDto;
 import com.example.recipea.service.dto.ResponseDto;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,6 +26,7 @@ import java.util.Objects;
  * REST controller for managing Recipe.
  */
 @Tag(name = "recipe-controller for handling users recipe", description = "Get|Create|Search|Delete the recipe")
+@SecurityRequirement(name = "JWTtoken")
 @RestController
 @RequestMapping("/v1/recipes")
 @Slf4j

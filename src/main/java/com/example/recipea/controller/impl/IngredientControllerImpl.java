@@ -5,6 +5,7 @@ import com.example.recipea.controller.IngredientController;
 import com.example.recipea.service.IngredientService;
 import com.example.recipea.service.dto.IngredientDto;
 import com.example.recipea.service.dto.ResponseDto;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import java.util.List;
  * REST controller for managing Ingredient.
  */
 @Tag(name = "ingredient-controller for handling ingredient", description = "Get|Create the ingredient")
+@SecurityRequirement(name = "JWTtoken")
 @RestController
 @RequestMapping("/v1/ingredients")
 @Slf4j

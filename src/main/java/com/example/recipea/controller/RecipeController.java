@@ -27,38 +27,42 @@ import java.util.List;
 public interface RecipeController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "List of RecipeDto. " +
-                    "recipes?tags=diet,-vegetarian&serve=4&instruction=fire&ingredients=rice,-oil",
+                    "recipes?serve=4&instruction=oven&ingredient=-salmon&isveg=false",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = RecipeDto.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid Request.", content = @Content)})
-    @Operation(summary = "Search one Recipe by tags,ingredients,serve,instruction.If you want to exclude something just add a minus before it. tags=diet,-vegetarian&ingredients=rice,-oil")
+    @Operation(summary = "Search one Recipe by ingredient,serve,instruction and isveg.If you want to exclude something just add a minus before it. &ingredient=-salmon &ingredient=oil")
     ResponseEntity<ResponseDto<RecipeDto>>  searchRecipes(
-            @Parameter(description = "How many peaople can serve this recipe.")
-            @RequestParam(required = false, defaultValue = "0") Integer serve,
-            @Parameter(description = "For include use just rice , for exclude use -rice. [ingredients=rice,salt,-oil]")
-            @RequestParam(required = false, defaultValue = "") String ingredients,
-            @Parameter(description = "Can search on the instruction of the recipe by keyword")
-            @RequestParam(required = false, defaultValue = "") String instruction,
-            @Parameter(description = "Can search on the isVegetarian of the recipe by keyword")
-            @RequestParam(required = false) Boolean isVegetarian);
+            @Parameter(description = "How many people can serve this recipe." ,example = "4")
+            @RequestParam(required = false) Integer serve,
+            @Parameter(description = "For include use just rice , for exclude use -rice. ingredient=-salmon or ingredient=potatoes" ,example = "-salmon")
+            @RequestParam(required = false, defaultValue = "") String ingredient,
+            @Parameter(description = "Can search on the instruction of the recipe by keyword. for example instruction=oven" ,example = "oven")
+            @RequestParam(required = false) String instruction,
+            @Parameter(description = "Can search on the isveg of the recipe by keyword",example = "true")
+            @RequestParam(required = false ) Boolean isveg);
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Create a RecipeDto. ",
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = RecipeDto.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid Request.", content = @Content)
     })
-    @Operation(summary = "Create a Recipe with Tags and ingredients, Use tags for add different label to the recipe.")
+    @Operation(summary = "Create a Recipe with list of ingredients.List of ingredients must be provided by id at ingredients field.")
     ResponseEntity<ResponseDto<RecipeDto>> createRecipe(@Valid @RequestBody RecipeDto recipeDto) throws URISyntaxException;
 
     @Operation(summary = "Get One Recipe by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success. Retrieve a recipes.", content = @Content)})
-    ResponseEntity<ResponseDto<RecipeDto>> getRecipe(@PathVariable Long id);
+    ResponseEntity<ResponseDto<RecipeDto>> getRecipe(
+            @Parameter(description = "The id we will search base on",example = "4")
+            @PathVariable Long id);
 
 
     @Operation(summary = "get all recipes")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success. Retrieve all recipes. you can pass pagination parameters as query. ?sort=id,desc&page=0&size=2", content = @Content)})
-    ResponseEntity<ResponseDto<RecipeDto>> getAllRecipes(@org.springdoc.api.annotations.ParameterObject Pageable pageable);
+    ResponseEntity<ResponseDto<RecipeDto>> getAllRecipes(
+            @Parameter(description = "Pagination parameters. Use sort for sorting. Page=0 means show me the page 0. size=2 means there are two items on per pages",example = "sort=id,desc&page=0&size=2")
+            @org.springdoc.api.annotations.ParameterObject Pageable pageable);
 
     @Operation(summary = "Update a recipe by id")
     @ApiResponses(value = {
