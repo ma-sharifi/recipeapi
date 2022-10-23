@@ -6,7 +6,6 @@ import com.example.recipea.security.AuthenticationFacade;
 import com.example.recipea.service.RecipeService;
 import com.example.recipea.service.dto.RecipeDto;
 import com.example.recipea.service.dto.ResponseDto;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -26,7 +25,6 @@ import java.util.Objects;
  * REST controller for managing Recipe.
  */
 @Tag(name = "recipe-controller for handling users recipe", description = "Get|Create|Search|Delete the recipe")
-@SecurityRequirement(name = "JWTtoken")
 @RestController
 @RequestMapping("/v1/recipes")
 @Slf4j
@@ -51,35 +49,32 @@ public class RecipeControllerImpl implements RecipeController {
      *    • Recipes that can serve 4 persons and have “potatoes” as an ingredient: ?serve=4&ingredient=potatoes
      *    • Recipes without “salmon” as an ingredient that has “oven” in the instructions: ?ingredient=-salmon&instruction=oven
      */
-    //    @Loggable
     @GetMapping("/search")
     public ResponseEntity<ResponseDto<RecipeDto>> searchRecipes(
             @RequestParam(required = false) Integer serve,
-            @RequestParam(required = false, defaultValue = "") String ingredient, //ingredient=rice,salt,-oil
-            @RequestParam(required = false) String instruction, //include
-            @RequestParam(required = false) Boolean isveg //include
+            @RequestParam(required = false, defaultValue = "") String ingredient, //ingredient=rice salt -oil
+            @RequestParam(required = false) String instruction,
+            @RequestParam(required = false) Boolean isveg
 
     ) {
-        List<RecipeDto> recipeDtoList = recipeService.findByIngredientsAndInstructionAndServeAndVegetarian(ingredient, instruction, isveg, serve);
-        log.debug("#searchRecipes is called: " + recipeDtoList);
+        log.debug("#searchRecipes is called: " + "serve = " + serve + ", ingredient = " + ingredient + ", instruction = " + instruction + ", isveg = " + isveg);
+        String username=authenticationFacade.getAuthentication().getName();
+        List<RecipeDto> recipeDtoList = recipeService.findByIngredientsAndInstructionAndServeAndVegetarian(ingredient, instruction, isveg, serve,username);
         ResponseDto<RecipeDto> responseDto = new ResponseDto<>(recipeDtoList);
         return ResponseEntity.ok().body(responseDto);
     }
 
-    /**
-     * get all the recipes.
-     */
     @GetMapping("")
     public ResponseEntity<ResponseDto<RecipeDto>> getAllRecipes(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get all Recipes");
-        Page<RecipeDto> resultPage=recipeService.findAll(pageable);
+        Page<RecipeDto> resultPage=recipeService.findAll(pageable,authenticationFacade.getAuthentication().getName());
         List<RecipeDto> resultRecipeList =resultPage.getContent();
         return ResponseEntity.ok(ResponseDto.<RecipeDto>builder().payload(resultRecipeList).build());
     }
 
     @PostMapping("")
     public ResponseEntity<ResponseDto<RecipeDto>> createRecipe(@Valid @NotNull @RequestBody RecipeDto recipeDto) throws URISyntaxException {
-        recipeDto.setUsername(authenticationFacade.getAuthentication().getName()); // Add username to dto for saving. each user can save one title of recipe
+        recipeDto.setUsername(authenticationFacade.getAuthentication().getName());
         RecipeDto result = recipeService.save(recipeDto);
         ResponseDto<RecipeDto> responseDto= ResponseDto.<RecipeDto>builder().payload(List.of(result)).httpStatus(HttpStatus.CREATED).build();
         return ResponseEntity
@@ -91,10 +86,10 @@ public class RecipeControllerImpl implements RecipeController {
     public ResponseEntity<ResponseDto<RecipeDto>> updateRecipe(
             @NotNull(message = "id is mandatory") @PathVariable(value = "id", required = false) final Long id,
             @Valid @RequestBody RecipeDto recipeDto) {
-        recipeDto.setUsername(authenticationFacade.getAuthentication().getName()); // update the user who updated the recipe
         if (!Objects.equals(id, recipeDto.getId())) {
             throw new BadRequestException("Invalid Recipe ID! id in the path must be the same as the id of object! id path: "+id+" ;id object: "+recipeDto.getId());
         }
+        recipeDto.setUsername(authenticationFacade.getAuthentication().getName()); // update the user who updated the recipe
         RecipeDto result = recipeService.update(recipeDto);
         ResponseDto<RecipeDto> responseDto= new ResponseDto<>(List.of(result));
         return ResponseEntity.ok().body(responseDto);
@@ -102,7 +97,7 @@ public class RecipeControllerImpl implements RecipeController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ResponseDto<RecipeDto>> getRecipe(@NotNull(message = "id is mandatory") @PathVariable Long id) {
-        RecipeDto recipeDto = recipeService.findOne(id);
+        RecipeDto recipeDto = recipeService.findOne(id, authenticationFacade.getAuthentication().getName());
         ResponseDto<RecipeDto> responseDto = new ResponseDto<>(List.of(recipeDto));
         return ResponseEntity.status(responseDto.getHttpStatus()).body(responseDto);
     }
@@ -112,7 +107,7 @@ public class RecipeControllerImpl implements RecipeController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRecipe(@PathVariable Long id) {
-        recipeService.delete(id);
+        recipeService.deleteByIdAndUsername(id,authenticationFacade.getAuthentication().getName());
         return ResponseEntity.noContent().build();
     }
 

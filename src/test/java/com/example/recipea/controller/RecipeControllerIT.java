@@ -53,6 +53,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 class RecipeControllerIT {
 
+    private static final String USERNAME = "mahdi";
     private static final String DEFAULT_TITLE = "Sushi";
     private static final String UPDATED_TITLE = "updated Sushi";
 
@@ -80,9 +81,8 @@ class RecipeControllerIT {
     private Recipe recipe;
     int randomInt= 1;
 
-
     public static Recipe createEntity() {
-        return new Recipe(DEFAULT_TITLE, DEFAULT_INSTRUCTION, DEFAULT_SERVE);
+        return new Recipe(DEFAULT_TITLE, DEFAULT_INSTRUCTION, DEFAULT_SERVE,"mahdi");
     }
 
     @BeforeEach
@@ -130,7 +130,7 @@ class RecipeControllerIT {
         saveData();
         // run query, we expect get the same result from endpoint.
         List<RecipeDto> listSearched = recipeService
-                .findByIngredientsAndInstructionAndServeAndVegetarian( null, null, true, null);
+                .findByIngredientsAndInstructionAndServeAndVegetarian( null, null, true, null,USERNAME);
 
         // Get all the recipeList
         MockHttpServletResponse responseMockMvc= mockMvc
@@ -156,7 +156,7 @@ class RecipeControllerIT {
         saveData();
         // run query, we expect get the same result from endpoint.
         List<RecipeDto> listSearched = recipeService
-                .findByIngredientsAndInstructionAndServeAndVegetarian(null , null, false, null);
+                .findByIngredientsAndInstructionAndServeAndVegetarian(null , null, false, null,USERNAME);
 
         // Get all the recipeList
         MockHttpServletResponse responseMockMvc = mockMvc
@@ -184,7 +184,7 @@ class RecipeControllerIT {
         // Initialize the database
         saveData();
         // run query, we expect get the same result from endpoint.
-        List<RecipeDto> listSearched = recipeService.findByIngredientsAndInstructionAndServeAndVegetarian("potatoes",  null, null, 4);
+        List<RecipeDto> listSearched = recipeService.findByIngredientsAndInstructionAndServeAndVegetarian("potatoes",  null, null, 4,USERNAME);
         // Get all the recipeList
         MockHttpServletResponse responseMockMvc = mockMvc
                 .perform(get(ENTITY_API_URL + "/search?serve=4&ingredient=potatoes").header("Authorization", JWT))
@@ -221,7 +221,7 @@ class RecipeControllerIT {
         saveData();
         // run query, we expect get the same result from endpoint.
         List<RecipeDto> listSearched = recipeService
-                .findByIngredientsAndInstructionAndServeAndVegetarian("-salmon", "oven", null, null);
+                .findByIngredientsAndInstructionAndServeAndVegetarian("-salmon", "oven", null, null,USERNAME);
 
         // search all the recipeList from endpoint
         MockHttpServletResponse responseMockMvc = mockMvc

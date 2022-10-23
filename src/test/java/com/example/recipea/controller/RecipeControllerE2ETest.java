@@ -42,7 +42,7 @@ class RecipeControllerE2ETest {
     private TestRestTemplate restTemplate;
 
     public static Recipe createEntity() {
-        return new Recipe(DEFAULT_TITLE, DEFAULT_INSTRUCTION, DEFAULT_SERVE);
+        return new Recipe(DEFAULT_TITLE, DEFAULT_INSTRUCTION, DEFAULT_SERVE,"mahdi");
     }
 
     @PostConstruct
@@ -121,8 +121,6 @@ class RecipeControllerE2ETest {
         assertEquals(HttpStatus.CREATED, responseEntityCreated.getStatusCode());
 
         ResponseDto<RecipeDto> responseDtoRecipeDto = toResponseDto(responseEntityCreated.getBody());
-
-        System.out.println("####responseDtoRecipeDto: " + responseDtoRecipeDto);
 
         RecipeDto recipeDtoCreated = responseDtoRecipeDto.getPayload().get(0);
         assertEquals("Dummy data for test update", recipeDtoCreated.getTitle());
