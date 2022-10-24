@@ -17,6 +17,8 @@ to-do list with things I would add if I have more time and explaining what is mi
 * Add @Loggable annotation for logging requests and response for finding issue in production. for sake of simplicity It did not add it to the code.
 * Using HATEOAS for linking resource together. For example after successfull login, service can provide the link of the recipe and ingredient for client in order to use them for next call.
   It helps do not har code url of the resources.
+* Add Cucumber for behavioral test
+* Use criteria and Specification for creating dynamic query. 
 
 ### Why are they missed: 
 * Due to the deadline has been set there is not enough time for complete them.

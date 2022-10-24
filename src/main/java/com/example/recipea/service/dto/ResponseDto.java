@@ -51,7 +51,7 @@ public class ResponseDto<T> {
     }
 
     public static <T> ResponseDto.ResponseDtoBuilder<T> builder() {
-        return new ResponseDtoBuilder<T>();
+        return new ResponseDtoBuilder<>();
     }
 
     public static class ResponseDtoBuilder<T> {
@@ -59,7 +59,6 @@ public class ResponseDto<T> {
         private String message="Success";
         private String details;
         private HttpStatus httpStatus;
-//        private final Instant timestamp = Instant.now();
         private List<T> payload;
         private Map<String, String> errors;
 

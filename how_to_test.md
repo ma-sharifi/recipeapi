@@ -1,5 +1,5 @@
 # How to test service
-It explains what needs to be done to use the service
+It explains what needs to be done to test the service
 
 ###You can test this project 4 different ways:
 1. [Swagger](http://localhost:8080/swagger-ui/index.html)
@@ -13,7 +13,8 @@ I described all APIs here. All APIs are protected except /v1/users that I used i
 #### 1. User /v1/users
 1. Issue a bearer token.
 * **POST**`/v1/users/login` HTTP Status: 200
-* Note: API get the username from this token and it effects on its queries.
+* Note: API get the username from this token and it effects on its queries. Queries of recipe have username as parameter.
+* Note: For test different user, you can provide 2 different Bearer Token (JWT) with different username.
 
 #### 2. Recipe /v1/recipes
 1. Users can create(add) recipe.
@@ -46,8 +47,13 @@ I described all APIs here. All APIs are protected except /v1/users that I used i
 2. Pass this token as a parameter 'Authorization:Bearer Bearer abcxwy...' to HTTPie reqest.
 
 ## Swagger:
+For using swagger first of all, you need to issue a token. Then apply this token to swagger. All APIs have example. For sake of simplicity you can use them.
 Call API '/v1/users/login' with your username and get the Bearer Token, Then click on Authorize button at the up right of the swagger main page.  Paste the token here. At last click on 'Authorize'. You can try other APIs now.
 >http://localhost:8080/swagger-ui/index.html
+
+## Postman
+Provided different request for different user Mahdi and Alex. I categorized them by folder. You need just import this file into your Postman.
+There is a Postman file of this project in this path located [here](postman/recipea.postman_collection.json)
 
 ## HTTPie
 
@@ -433,18 +439,18 @@ http GET "localhost:8080/v1/recipes/search?ingredient=-salmon&instruction=oven" 
 * **GET**`/v1/ingredients/{id}` HTTP Status: 200
 
 
-### POST /v1/recipes
-1. Users can create(add) recipe
-* **POST**`/v1/recipes` HTTP Status: 201
-* Note: Can remove the response body. Becasue I provided the URL of the just created resource into Location field of HTTP Header.
+### 1. POST /v1/ingredients
+1. Users can create(add) ingredient
+* **POST**`/v1/ingredients` HTTP Status: 201
+* Note: Can remove the response body. Because I provided the URL of the just created resource into Location field of HTTP Header.
 #### Request:
-For this request I used **--raw JSON**.
+For this request I used **--raw JSON** in order to manage to send raw JSON with HTTPie
 ```bash
 http --raw '{"title": "salt"}' POST localhost:8080/v1/ingredients 'Authorization:Bearer Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2NTE4ODk5LCJleHAiOjE2NjkxMTQ0OTl9.zBrMxevBPatKwirCF_OmwpAeusxB63ze5yy_RkefqgKZnRAuxy7y-IYIvDjznTdpgwrxqvXuXLzs7GnKhF6m_w'
 ```
 
 #### Successful response:
-The header and Location is enough for this API. We can remove the reponse body. If client needs, It can get url of the just created entity from `Location` in HTTP Header.
+The header and Location is enough for this API. We can remove the response body. If client needs, It can get url of the just created entity from `Location` in HTTP Header.
 ```bash
 HTTP/1.1 201
 Location: /v1/ingredients/8
@@ -463,8 +469,8 @@ Location: /v1/ingredients/8
 }
 ```
 
-### GET /v1/ingredients
-Get list of all recipes HTTP Status: 200
+### 2. GET /v1/ingredients
+Get list of all ingredients HTTP Status: 200
 #### Request:
 ```bash
 http GET localhost:8080/v1/ingredients 'Authorization:Bearer Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2NTE4ODk5LCJleHAiOjE2NjkxMTQ0OTl9.zBrMxevBPatKwirCF_OmwpAeusxB63ze5yy_RkefqgKZnRAuxy7y-IYIvDjznTdpgwrxqvXuXLzs7GnKhF6m_w'
@@ -499,8 +505,8 @@ HTTP/1.1 200
 }
 ```
 
-### GET /v1/ingredients/{id}
-Get a recipe by its `id`. HTTP Status: 200
+### 3. GET /v1/ingredients/{id}
+Get a ingredient by its `id`. HTTP Status: 200
 Get the id from response of POST /v1/ingredients
 #### Request:
 ```bash

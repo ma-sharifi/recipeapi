@@ -36,6 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Integration tests for the Recipe Endpoint REST controller.
+ * Verify that the endpoint can interact with infrastructure services such as databases and other application services.
  */
 @IntegrationTest
 @DisplayName("Recipe controller Integration test")
@@ -164,7 +165,7 @@ class RecipeControllerIT {
     void shouldReturnRecipesForServe4PersonsAndPotatoesIngredient_whenServe4AndIngredientPotatoesIsCalled() throws Exception {
         // Initialize the database
         // run query, we expect get the same result from endpoint.
-        List<RecipeDto> listSearched = recipeService.findByIngredientsAndInstructionAndServeAndVegetarian("potatoes",  null, null, 4, USERNAME_MAHDI);
+        List<RecipeDto> resultOfRepository = recipeService.findByIngredientsAndInstructionAndServeAndVegetarian("potatoes",  null, null, 4, USERNAME_MAHDI);
         // Get all the recipeList
         MockHttpServletResponse responseMockMvc = mockMvc
                 .perform(get(ENTITY_API_URL + "/search?serve=4&ingredient=potatoes").header("Authorization", JWT_MAHDI))
@@ -178,12 +179,12 @@ class RecipeControllerIT {
         // then convert json string to object ResponseDto<RecipeDto>
         ResponseDto<RecipeDto> responseDto = toResponseDto(responseMockMvc.getContentAsString());
         // The result of repository must be equal with result of the endpoint
-        assertEquals(listSearched, responseDto.getPayload());
+        assertEquals(resultOfRepository, responseDto.getPayload());
 
         //Each recipe must have potatoes
-        long sizePotatoRecipe= responseDto.getPayload().stream()
+        long sizePotatoRecipeObtainFromProcessingTheResponseOfTheAPIcall= responseDto.getPayload().stream()
                 .filter(recipe -> recipe.getIngredients().stream().anyMatch(ingredientDto -> ingredientDto.getTitle().contains("potatoes"))).count();
-        assertEquals(sizePotatoRecipe,responseDto.getPayload().size());
+        assertEquals(resultOfRepository.size(),sizePotatoRecipeObtainFromProcessingTheResponseOfTheAPIcall);
         // all recipes must have oven
         long countServe = responseDto.getPayload().stream().filter(recipe -> recipe.getServe()==4).count();
         assertEquals(countServe, responseDto.getPayload().size());
@@ -226,7 +227,7 @@ class RecipeControllerIT {
 
         // Initialize the database
         // run query, we expect get the same result from endpoint.
-        List<RecipeDto> listSearched = recipeService
+        List<RecipeDto> resultOfRepository = recipeService
                 .findByIngredientsAndInstructionAndServeAndVegetarian("-salmon", "oven", null, null, USERNAME_MAHDI);
 
         // search all the recipeList from endpoint
@@ -240,12 +241,12 @@ class RecipeControllerIT {
         // then convert json string to object ResponseDto<RecipeDto>
         ResponseDto<RecipeDto> responseDto = toResponseDto(responseMockMvc.getContentAsString());
         // The result of repository must be equal with result of the endpoint
-        assertEquals(listSearched, responseDto.getPayload());
+        assertEquals(resultOfRepository, responseDto.getPayload());
 
         //No recipe must have salmon
-        long sizeNonSalmonRecipe= responseDto.getPayload().stream()
+        long sizeNonSalmonRecipeObtainFromProcessingTheResponseOfTheAPIcall= responseDto.getPayload().stream()
                 .filter(recipe -> recipe.getIngredients().stream().noneMatch(ingredientDto -> ingredientDto.getTitle().contains("salmon"))).count();
-        assertEquals(sizeNonSalmonRecipe,responseDto.getPayload().size());
+        assertEquals(resultOfRepository.size(),sizeNonSalmonRecipeObtainFromProcessingTheResponseOfTheAPIcall);
         // all recipes must have oven
         long countOven = responseDto.getPayload().stream().filter(recipe -> recipe.getInstruction().contains("oven")).count();
         assertEquals(countOven, responseDto.getPayload().size());

@@ -38,17 +38,6 @@ import java.util.Map;
 @Slf4j
 public class GlobalExceptionHandler {
 
-//    @Profile("prod") // Because we need to know more abour out unhandled exception in developement
-//    @ExceptionHandler(value = {Exception.class})
-//    public ResponseEntity<ResponseDto<Void>> handleUnhandledException(Exception ex) {
-//        log.error("#Unhandled exception occurred: " + ex.getMessage());
-//        ResponseDto<Void> responseDto = new ResponseDto<>();
-//        responseDto.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-//        responseDto.setErrorCode(500);
-//        responseDto.setMessage("Internal server occurred. please refer to log files.");
-//        return ResponseEntity.status(responseDto.getHttpStatus()).body(responseDto);
-//    }
-
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ResponseDto<Void>> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {

@@ -17,8 +17,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.nio.file.AccessDeniedException;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,11 +28,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Integration tests for the Ingredient Endpoint REST controller.
+ * Verify that the endpoint can interact with infrastructure services such as databases and other application services.
  */
 
 @IntegrationTest
 @DisplayName("Ingredient controller Integration test")
-class IngredientControllerImplIT {
+class IngredientControllerIT {
 
     private static final String DEFAULT_TITLE = "oil";
     private static final String UPDATED_TITLE = "updated oil";

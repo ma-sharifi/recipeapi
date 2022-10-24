@@ -39,7 +39,7 @@ environement:
 ```
 
 ### Log file
-The level of log in default mode is DEBUG and in production by defualt is INFO.
+The level of log in default mode is DEBUG and in production by default is INFO. 
 You can change t in `application` properties file
 
 ```shell
@@ -65,7 +65,7 @@ Used a H2 database for default profile
 spring:
     datasource:
         url: jdbc:h2:mem:recipea
-    #   url: jdbc:h2:file:/data/recipea if you  want to store data, uncomment this line
+        #url: jdbc:h2:file:/data/recipea if you  want to store data, uncomment this line
         driverClassName: org.h2.Driver
         username: sa
         password: sa

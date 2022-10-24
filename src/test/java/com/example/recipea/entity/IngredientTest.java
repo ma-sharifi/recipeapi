@@ -47,6 +47,5 @@ class IngredientTest {
         ingredient1.setId(null);
         assertNotEquals(ingredient1, ingredient2);
 
-
     }
 }
