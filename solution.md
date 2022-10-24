@@ -1,35 +1,56 @@
 ## Solution: a short description of the solution and explaining some design decisions
 
-Created a standalone java application which allows **users** to manage their favourite recipes.
-It should allow adding, updating, removing and fetching recipes.
+Created a standalone java application that allows **users** to manage their favorite recipes.
+It should allow adding, updating, removing, and fetching recipes.
 Additionally, users should be able to filter available recipes based on one or more criteria.
 
-For handling this, I implemented a Spring Boot REST application to handle the criteria.
-After user get their bearer token, user can interact with other APIs.
-User needs to create ingredients and recipe then can manipulate them.
-An ingredient can define one time not more than this. I mean we can have one oil for all recipes in my senario. 
-I defined a unique constraint on title of ingredient.
-User can store just one recipe with a specific title not more. I defined a unique constraint on title+username of recipe entity.
-Before saving a new recipe it needs to get ingredient id, then embed it into you RecipeDto then send your POST request for saving Recipe.
-The diagram shown below:
+To handle this, I implemented a Spring Boot REST application to handle the criteria.
+After users get their bearer token, users can interact with other APIs.
+The user needs to create ingredients, and the recipe can then organize them.
 
-### For sake of simplicity:
-* I did not check recipe is belong to current user for delete and update it. I assumed current user is admin and can do everything.
-* User can see every other recipe belong to other user. If you dont want to see just add AND username = ?username to the query.
-* Used Spring Security. And assumed the user data already persisted in database.
-* I provided vegetarian as a boolean in Recipe entity. If I had defined it as an entity, it would have taken longer and the code would have been more complex.
+
+### Database diagram
+An ingredient can define one time not more than this. I mean we can have one oil for all recipes in my scenario.
+I defined a unique constraint on the title of the ingredient.
+Users can store just one recipe with a specific title, not more. I defined a unique constraint on the title+username of the recipe entity.
+Before saving a new recipe it needs to get the ingredient id, then embed it into your RecipeDto then send the POST request for saving the Recipe.
+
+![database](https://user-images.githubusercontent.com/8404721/197364029-7958b7f5-7d3a-4606-9c07-90c66f71dc75.jpg)
+
+Query and its test were the challenging part of this assessment, I needed to show the recipe without `salmon`and with `potatoes`.
+#### For ingredient exclude
+At first, I selected the Recipe's ID with salmon in ingredients, then my query must not in this table:
+>`ResultSet=(SELECT JND_RECIPE_INGREDIENT.RECIPE_ID FROM JND_RECIPE_INGREDIENT JOIN T_INGREDIENT i ON i.id = JND_RECIPE_INGREDIENT.INGREDIENT_ID  WHERE 1<2 ${WHERE} )` 
+ 
+That ${WHERE} will be replaced with LOWER(i.title) =? `salmon`
+And `${NOT}` will be replaced with `not` in the following script:
+> `SELECT * FROM T_RECIPE r WHERE r.id ${NOT} in (ResultSet) AND 1<2`
+* It will be turned to: 
+> `SELECT * FROM T_RECIPE r WHERE r.id NOT in (ResultSet) AND 1<2`
+
+To test them after getting the result, I used following filter to find how many recipe I have without matching with `salmon` in its ingredients.
+> long sizeNonSalmonRecipeObtainFromProcessingTheResponseOfTheAPIcall= responseDto.getPayload().stream().filter(recipe -> recipe.getIngredients().stream().noneMatch(ingredientDto -> ingredientDto.getTitle().contains("salmon"))).count();
+* In assert I test the size of response of my stream process with size of query obtained from repository.
+> assertEquals(sizeNonSalmonRecipeObtainFromProcessingTheResponseOfTheAPIcall,resultOfRepository.size());
+
+#### For ingredient include(Recipe with potatoes ingredient), 
+I selected the Recipe's ID with `potatoes` in ingredients as well, then my query must be in this table the same as without salmon.
+But needed to replace `${NOT}` with `""` , because we want our recipe have `potatoes` in its ingredients.
+> `SELECT * FROM T_RECIPE r WHERE r.id ${NOT} in (ResultSet) AND 1<2`
+* It will be turned to: 
+> `SELECT * FROM T_RECIPE r WHERE r.id in (ResultSet) AND 1<2`
+
+* To test them after getting the result, I used following filter to find how many recipe I have with any matching with `potatoes` in its ingredients.
+
+>long sizePotatoRecipeObtainFromProcessingTheResponseOfTheAPIcall= responseDto.getPayload().stream().filter(recipe -> recipe.getIngredients().stream().anyMatch(ingredientDto -> ingredientDto.getTitle().contains("potatoes"))).count();
+* In assert I test the size of response of my stream process with size of query obtained from repository.
+>assertEquals(resultOfRepository, sizePotatoRecipeObtainFromProcessingTheResponseOfTheAPIcall);
+* You can find them in test/controller/RecipeControllerIT test.
 
 ### ResponseDto
 There is a ResponseDto object. our response consist of this object. This object has a List<T> payload.
 Client **MUST** find the body of the response here. Due to simplicity for client, payload is always a list. As a result, client just need process this field.
 We know an object is an array with a length of one.
-
-### Database diagram
-
-![database](https://user-images.githubusercontent.com/8404721/197364029-7958b7f5-7d3a-4606-9c07-90c66f71dc75.jpg)
-
-Query was the challenging part of this assessment, I need to show the recipe without salmon. 
-At first I select the recipe with salmon, then my query must not in this table. Other part was as usual. 
 
 ### API design
 
@@ -57,6 +78,23 @@ For recipe include potatoes you need to send this request `ingredient=potatoes`.
 4. If the entity was not found HTTP Status will be 404 (Not Found).
 5. If something unhandle accoured in server side the HTTP Status will be 500.
 
+#### Endpoints
+**v1/recipes**
+User can add, update, remove and fetch recipes
+
+**v1/ingredients**
+User can add and fetch ingredients
+
+**v1/users/login**
+Issue token
+* Note:
+  1. Assumed user already registered and we persist them.
+  2. Assumed we checked the user and password and found they are a match. then we issued a token.
+  3. This endpoint is not protected.
+1. We issue a JWT token and set the subject our user.
+2. Put the Bearer token into body(for simplicity) and Authorization HTTP Header.
+3. Return 200 if everything goes well.
+
 ### Security
 All APIs protect by Bearer token except /login. For simplicity is used Spring Security. For production, I will use Keycloak.
 I used a facade for authentication. It helps to retrieve the authentication everywhere,not just in @Controller beans.
@@ -64,8 +102,9 @@ Also This facade encapsulates a complex subsystem behind a simple interface. It 
 In the future we can add Keycloak to our project as well.
 
 ###Test
-Different type of test provided.
-You can test the application 4 different ways. Swagger, Postman, mvn Test, HTTPie CLI. 
+* Different type of test provided.
+* Provided a solitary test for RecipeService. I mocked the database and just test functionality.
+* You can test the application 4 different ways. Swagger, Postman, mvn Test, HTTPie CLI. 
 
 ### Exception
 Defined different Exceptions for different situations.
@@ -88,26 +127,10 @@ Provided the exceptions below;
 * RecipeNotFoundException
 * IngredientNotFoundException
 
+
 ### Mapping
 I used MapStruct for mapping entity to Dto and vice versa. Mapstruct is compile time not runtime. It helps to have a better speed.
 
-####Notes:
-* Due to the lack of Category in Omdb API, first of all file was checked for "Best Picture".
-* Content of OMDB API: "Title": "Inception", "Awards": "Won 4 Oscars. 157 wins & 220 nominations total",
-* Content of CSV FILE: 2010 (83rd),Best Picture,The King's Speech,"Iain Canning, Emile Sherman and Gareth Unwin, Producers",YES,,,,,,
-
-**v1/recipes**
-User can add, update, remove and fetch recipes
-
-**v1/ingredients**
-User can add, update, and fetch ingredients
-
-**v1/users/login**
-Issue token
-* Note:
-    1. Assumed user already registered and we persist them.
-    2. Assumed we checked the user and password and found they are a match. then we issued a token.
-    3. This endpoint is not protected.
-1. We issue a JWT token and set the subject our user.
-2. Put the Bearer token into body(for simplicity) and Authorization HTTP Header.
-3. Return 200 if everything goes well.
+### For sake of simplicity:
+* Used Spring Security. And assumed the user data already persisted in database.
+* I provided vegetarian as a boolean in Recipe entity. If I had defined it as an entity, it would have taken longer and the code would have been more complex.

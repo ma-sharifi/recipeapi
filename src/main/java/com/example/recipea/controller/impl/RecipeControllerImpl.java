@@ -32,7 +32,7 @@ public class RecipeControllerImpl implements RecipeController {
 
     private final RecipeService recipeService;
 
-    private final AuthenticationFacade authenticationFacade;
+    private final AuthenticationFacade authenticationFacade;//For getting user's username
 
     public RecipeControllerImpl(RecipeService recipeService, AuthenticationFacade authenticationFacade) {
         this.recipeService = recipeService;
@@ -78,7 +78,7 @@ public class RecipeControllerImpl implements RecipeController {
         RecipeDto result = recipeService.save(recipeDto);
         ResponseDto<RecipeDto> responseDto = ResponseDto.<RecipeDto>builder().payload(List.of(result)).httpStatus(HttpStatus.CREATED).build();
         return ResponseEntity
-                .created(new URI("/v1/recipes/" + result.getId()))
+                .created(new URI("/v1/recipes/" + result.getId()))//Put the url of just added resource into Location HTTP header.
                 .body(responseDto);
     }
 
@@ -86,7 +86,7 @@ public class RecipeControllerImpl implements RecipeController {
     public ResponseEntity<ResponseDto<RecipeDto>> updateRecipe(
             @NotNull(message = "id is mandatory") @PathVariable(value = "id", required = false) final Long id,
             @Valid @RequestBody RecipeDto recipeDto) {
-        if (!Objects.equals(id, recipeDto.getId())) {
+        if (!Objects.equals(id, recipeDto.getId())) { //Provided Id , with ID of object must be the  same.
             throw new BadRequestException("Invalid Recipe ID! id in the path must be the same as the id of object! id path: " + id + " ;id object: " + recipeDto.getId());
         }
         recipeDto.setUsername(authenticationFacade.getAuthentication().getName()); // update the user who updated the recipe
@@ -102,9 +102,7 @@ public class RecipeControllerImpl implements RecipeController {
         return ResponseEntity.status(responseDto.getHttpStatus()).body(responseDto);
     }
 
-    /**
-     * We can test, if this recipe is belong to this user, user can delete it. for sake of simplicity I have not done it.
-     */
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRecipe(@PathVariable Long id) {
         long effectedRow = recipeService.deleteByIdAndUsername(id, authenticationFacade.getAuthentication().getName());

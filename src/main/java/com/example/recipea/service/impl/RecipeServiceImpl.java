@@ -32,6 +32,11 @@ import java.util.stream.Collectors;
 @Slf4j
 public class RecipeServiceImpl implements RecipeService {
 
+    public static final String QUERY_INGREDIENT_IN_RECIPE = "SELECT * FROM T_RECIPE r " +
+            "WHERE r.id ${NOT} in " +
+            "(SELECT JND_RECIPE_INGREDIENT.RECIPE_ID from " +
+            "JND_RECIPE_INGREDIENT  JOIN T_INGREDIENT i ON i.id = JND_RECIPE_INGREDIENT.INGREDIENT_ID " +
+            "where 1<2 ${WHERE} ) AND 1<2 ";
     private final RecipeRepository recipeRepository;
 
     private final RecipeMapper recipeMapper;
@@ -61,11 +66,7 @@ public class RecipeServiceImpl implements RecipeService {
         Map<Integer, Object> parameters = new HashMap<>();
         StringBuilder queryBuilder = new StringBuilder();
 
-        queryBuilder.append("select * from T_RECIPE r " +
-                "where r.id ${NOT} in " +
-                "(select JND_RECIPE_INGREDIENT.RECIPE_ID from " +
-                "JND_RECIPE_INGREDIENT  join T_INGREDIENT i on i.id = JND_RECIPE_INGREDIENT.INGREDIENT_ID " +
-                "where 1<2 ${WHERE} ) AND 1<2 ");
+        queryBuilder.append(QUERY_INGREDIENT_IN_RECIPE);
 
         int counter = 1;
         String not = "";// I used it for excluding an ingredient like -salmon.

@@ -281,43 +281,6 @@
 							"response": []
 						},
 						{
-							"name": "find by specific excluded ingredient",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:8080/v1/recipes/search?ingredient=-salmon",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"v1",
-										"recipes",
-										"search"
-									],
-									"query": [
-										{
-											"key": "ingredient",
-											"value": "-salmon"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
 							"name": "http://localhost:8080/v1/recipes/1",
 							"request": {
 								"auth": {
@@ -351,7 +314,505 @@
 					]
 				},
 				{
-					"name": "By recipes Id",
+					"name": "alex",
+					"item": [
+						{
+							"name": "create recipe alex",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201 using to have\", function () {",
+											"  pm.response.to.have.status(201);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoiYWxleCIsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE2NjY1NjAwOTAsImV4cCI6MTY2OTE1NTY5MH0.5rRG9qp1qQL73l-g5eK0W1TIB3sba1W-sd_PCJg7lF5FxS5Q7tdFTj13NqyDcGkgLmtjXN48ruDo7Perq6yhxQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n            \"title\": \"French fries alex\",\n            \"instruction\": \"Cook potato on oven\",\n            \"serve\": 4,\n            \"vegetarian\": true,\n            \"ingredients\": [\n                {\n                    \"title\": \"oil\",\n                    \"id\": 1\n                },\n                {\n                    \"title\": \"potatoes\",\n                    \"id\": 3\n                }\n            ]\n        }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/v1/recipes",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"recipes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "all recipe alex",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200 using to have\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoiYWxleCIsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE2NjY1NjAwOTAsImV4cCI6MTY2OTE1NTY5MH0.5rRG9qp1qQL73l-g5eK0W1TIB3sba1W-sd_PCJg7lF5FxS5Q7tdFTj13NqyDcGkgLmtjXN48ruDo7Perq6yhxQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/v1/recipes",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"recipes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "one recipe by id alex",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200 using to have\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoiYWxpIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTY2NjU0NDIyMSwiZXhwIjoxNjY5MTM5ODIxfQ.QIvMI_325-8TDM6YoQ0ARZr3iaT8nM4W-ZvNnF8S0BQ2eqMKtTEGAzQyuYqpQs26fZDU-aqOWDlPj3ypRMxIKA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/v1/recipes/6",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"recipes",
+										"6"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "find by specific excluded ingredient alex",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoiYWxpIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTY2NjU0NzQ3NywiZXhwIjoxNjY5MTQzMDc3fQ._uyRkQxIpXMeWhTj9b8NIEwrWvrUjmXADPId-yRDhz3LlrlVgt57mF_rM3U8gqhVE3cIQjFK2044qH5_Ne6k5A",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/v1/recipes/search?ingredient=-salmon",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"recipes",
+										"search"
+									],
+									"query": [
+										{
+											"key": "ingredient",
+											"value": "-salmon"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update recipe by id alex",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200 using to have\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n            \"id\": 6,\n            \"title\": \"Salmon23\",\n            \"username\": \"mahdi\",\n            \"instruction\": \"This kabab cooked by stove4\",\n            \"serve\": 3,\n            \"vegetarian\": false,\n            \"ingredients\": [\n                {\n                    \"title\": \"oil\",\n                    \"id\": 1\n                },\n                {\n                    \"title\": \"salmon\",\n                    \"id\": 2\n                }\n            ]\n        }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/v1/recipes/6",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"recipes",
+										"6"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "By recipes Id alex",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204 using to have\", function () {",
+											"  pm.response.to.have.status(204);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoiYWxleCIsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE2NjY1NjAwOTAsImV4cCI6MTY2OTE1NTY5MH0.5rRG9qp1qQL73l-g5eK0W1TIB3sba1W-sd_PCJg7lF5FxS5Q7tdFTj13NqyDcGkgLmtjXN48ruDo7Perq6yhxQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/v1/recipes/4",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"recipes",
+										"4"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "mahdi",
+					"item": [
+						{
+							"name": "create recipe mahdi",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201 using to have\", function () {",
+											"  pm.response.to.have.status(201);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"salmon\",\n    \"instruction\": \"cooked by stove\",\n    \"serve\": 2,\n    \"vegetarian\": false,\n    \"ingredients\": [\n        {\n            \"id\":1\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/v1/recipes",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"recipes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "all recipe mahdi",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200 using to have\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2NTM3OTM3LCJleHAiOjE2NjkxMzM1Mzd9.pd3CF4iTFzNf6BZ_yEgBtJA2JVs56smydxT3-KREKWAmC89niS2iviPjBnZlmMxLV57U2Dkv_wqcHMiAfPLx8g",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/v1/recipes?sort=id,desc&page=0&size=2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"recipes"
+									],
+									"query": [
+										{
+											"key": "sort",
+											"value": "id,desc"
+										},
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "one recipe by id mahdi",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200 using to have\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/v1/recipes/4",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"recipes",
+										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update recipe by id mahdi",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200 using to have\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n            \"id\": 6,\n            \"title\": \"Salmon23\",\n            \"username\": \"mahdi\",\n            \"instruction\": \"This kabab cooked by stove4\",\n            \"serve\": 3,\n            \"vegetarian\": false,\n            \"ingredients\": [\n                {\n                    \"title\": \"oil\",\n                    \"id\": 1\n                },\n                {\n                    \"title\": \"salmon\",\n                    \"id\": 2\n                }\n            ]\n        }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/v1/recipes/6",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"v1",
+										"recipes",
+										"6"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "By recipes Iid mahdi",
 					"event": [
 						{
 							"listen": "test",
@@ -380,7 +841,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/v1/recipes/6",
+							"raw": "http://localhost:8080/v1/recipes/8",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -389,118 +850,7 @@
 							"path": [
 								"v1",
 								"recipes",
-								"6"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "create recipe",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 201 using to have\", function () {",
-									"  pm.response.to.have.status(201);",
-									"});",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n            \"title\": \"Salmon With 1 ingredient\",\n            \"instruction\": \"This kabab cooked by stove\",\n            \"serve\": 3,\n            \"vegetarian\": false,\n            \"ingredients\": [\n                {\n                    \"id\":1\n                }\n            ]\n        }",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/v1/recipes",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"v1",
-								"recipes"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "all recipe",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200 using to have\", function () {",
-									"  pm.response.to.have.status(200);",
-									"});",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/v1/recipes?sort=id,desc&page=0&size=2",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"v1",
-								"recipes"
-							],
-							"query": [
-								{
-									"key": "sort",
-									"value": "id,desc"
-								},
-								{
-									"key": "page",
-									"value": "0"
-								},
-								{
-									"key": "size",
-									"value": "2"
-								}
+								"8"
 							]
 						}
 					},
@@ -560,60 +910,6 @@
 					"response": []
 				},
 				{
-					"name": "update recipe by id",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200 using to have\", function () {",
-									"  pm.response.to.have.status(200);",
-									"});",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n            \"id\": 6,\n            \"title\": \"Salmon23\",\n            \"username\": \"mahdi\",\n            \"instruction\": \"This kabab cooked by stove4\",\n            \"serve\": 3,\n            \"vegetarian\": false,\n            \"ingredients\": [\n                {\n                    \"title\": \"oil\",\n                    \"id\": 1\n                },\n                {\n                    \"title\": \"salmon\",\n                    \"id\": 2\n                }\n            ]\n        }",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/v1/recipes/6",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"v1",
-								"recipes",
-								"6"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "not-existing-path",
 					"request": {
 						"auth": {
@@ -640,51 +936,6 @@
 								"recipes",
 								"not",
 								"existing-path"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "one recipe by id",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200 using to have\", function () {",
-									"  pm.response.to.have.status(200);",
-									"});",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJyZWNpcGVhIiwic3ViIjoibWFoZGkiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjY2Mzg0MzU3LCJleHAiOjE2Njg5Nzk5NTd9.Zxe8qvAryL6FPNX4MKHEKIJX6lHPXeWOcB26mwQFbud8PcNd8P0Xb6zJ7AU0g_wlLv6LYQqf-iaz6VOxkpNQpw",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/v1/recipes/7",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"v1",
-								"recipes",
-								"7"
 							]
 						}
 					},
@@ -829,7 +1080,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"oil2\"\n}",
+							"raw": "{\n    \"title\": \"salt\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -854,7 +1105,7 @@
 			]
 		},
 		{
-			"name": "login",
+			"name": "login mahdi",
 			"event": [
 				{
 					"listen": "test",
@@ -878,6 +1129,51 @@
 						{
 							"key": "username",
 							"value": "mahdi",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/users/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login alex",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 using to have\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "alex",
 							"type": "text"
 						}
 					]

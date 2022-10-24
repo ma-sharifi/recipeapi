@@ -13,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.Authentication;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -29,9 +28,13 @@ import static org.mockito.Mockito.*;
 
 /**
  * @author Mahdi Sharifi
+ *
+ * Solitary unit test—Tests a class in isolation using mock objects for the class’s dependencies
  */
 @ExtendWith(MockitoExtension.class)
-class RecipeServiceSolitaryTest {
+class RecipeServiceUnitTest {//OR RecipeServiceSolitaryTest
+
+    public static final String USERNAME_MAHDI = "mahdi";
 
     RecipeService service;
 
@@ -46,52 +49,40 @@ class RecipeServiceSolitaryTest {
 
     @Spy
     EntityManager entityManager;
-//    @Spy
-//    AuthenticationFacade authenticationFacade;
 
     @BeforeEach
     void initializeService() {
         service = new RecipeServiceImpl(repository, mapper, entityManager);
-//        Authentication authentication = Mockito.mock(Authentication.class);
-// Mockito.whens() for your authorization object
-//        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
-
-//        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
-//        SecurityContextHolder.setContext(securityContext);
-
-//        when(authenticationFacade.getAuthentication()).thenReturn(authentication);
     }
-
 
     @Test
     void shouldReturnRecipeNotFoundException_whenSaveGetIsCalled() {
         RecipeNotFoundException thrown = Assertions.assertThrows(RecipeNotFoundException.class, () -> {
-            service.findOne(1000L, "mahdi");
+            service.findOne(1000L, USERNAME_MAHDI);
         });
         assertTrue(thrown.getMessage().contains("Could not find the recipe"));
     }
 
     @Test
     void shouldReturnRecipeStubbed_whenFindIsCalled() throws Exception {
-        Recipe entity = new Recipe("Smoky Rice", "You need to cook the rice with fire and coal", 1,"mahdi");
+        Recipe entity = new Recipe("Smoky Rice", "You need to cook the rice with fire and coal", 1,USERNAME_MAHDI);
         entity.setId(100L);
 
         // Arrange stub save method. It must return given entity.
-        when(repository.findByIdAndUsername(100L,"mahdi")).thenReturn(Optional.of(entity));
+        when(repository.findByIdAndUsername(100L,USERNAME_MAHDI)).thenReturn(Optional.of(entity));
 
         RecipeDto expectedRecipeDto = mapper.toDto(entity);
 
         // Act
-        RecipeDto actualRecipeDto = service.findOne(100L, "mahdi");
-        verify(repository, times(1)).findByIdAndUsername(100L,"mahdi");
+        RecipeDto actualRecipeDto = service.findOne(100L, USERNAME_MAHDI);
+        verify(repository, times(1)).findByIdAndUsername(100L,USERNAME_MAHDI);
         // Assert
         assertThat(actualRecipeDto, is(equalTo(expectedRecipeDto)));
     }
 
     @Test
     void shouldReturnRecipeStubbed_whenSaveIsCalled() throws Exception {
-        Recipe entity = new Recipe("Smoky Rice", "You need to cook the rice with fire and coal", 1,"mahdi");
-        entity.setUsername("mahdi");
+        Recipe entity = new Recipe("Smoky Rice", "You need to cook the rice with fire and coal", 1,USERNAME_MAHDI);
         // Arrange stub save method. It must return given entity.
         when(repository.save(any(Recipe.class))).thenReturn(entity);
 
@@ -123,9 +114,9 @@ class RecipeServiceSolitaryTest {
 
     @Test
     void shouldCaptureSaveMultipleTimes_whenSaveIsCalled() {
-        Recipe entity1 = new Recipe("Smoky Rice1", "You need to cook the rice with fire and coal1", 1,"mahdi");
-        Recipe entity2 = new Recipe("Smoky Rice2", "You need to cook the rice with fire and coal2", 2,"mahdi");
-        Recipe entity3 = new Recipe("Smoky Rice3", "You need to cook the rice with fire and coal3", 3,"mahdi");
+        Recipe entity1 = new Recipe("Smoky Rice1", "You need to cook the rice with fire and coal1", 1,USERNAME_MAHDI);
+        Recipe entity2 = new Recipe("Smoky Rice2", "You need to cook the rice with fire and coal2", 2,USERNAME_MAHDI);
+        Recipe entity3 = new Recipe("Smoky Rice3", "You need to cook the rice with fire and coal3", 3,USERNAME_MAHDI);
 
         service.save(mapper.toDto(entity1));
         service.save(mapper.toDto(entity2));
